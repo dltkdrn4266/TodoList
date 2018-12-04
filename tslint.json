@@ -1,0 +1,19 @@
+{
+    "defaultSeverity": "error",
+    "extends": [
+        "tslint:recommended",
+        "tslint-config-standard",
+        "tslint-react",
+        "tslint-config-prettier"
+    ],
+    "rules": {
+        "object-literal-sort-keys": false,
+        "member-ordering": false,
+        "no-console": false,
+        "indent": [true, "spaces", 4],
+        "object-literal-shorthand": false,
+        "no-bitwise": false,
+        "prefer-for-of": false,
+        "max-classes-per-file": false
+    }
+}
