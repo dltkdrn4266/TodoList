@@ -1,5 +1,5 @@
 {
-  "name": "test",
+  "name": "TodoProject",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -7,40 +7,32 @@
     "test": "jest"
   },
   "dependencies": {
-    "4": "0.0.0",
-    "@babel/plugin-proposal-class-properties": "^7.2.1",
+    "@babel/core": "^7.0.0",
     "@babel/plugin-proposal-decorators": "^7.2.0",
-    "@types/react": "^16.7.11",
-    "@types/react-native": "^0.57.15",
-    "@types/react-native-vector-icons": "^4.6.4",
+    "@types/react": "^16.7.13",
+    "@types/react-native": "^0.57.17",
+    "@types/react-navigation": "^2.13.7",
     "axios": "^0.18.0",
-    "es6-symbol": "^3.1.1",
+    "babel-loader": "^8.0.0-beta.6",
     "mobx": "^4.7.0",
     "mobx-react": "^5.4.2",
-    "react": "16.6.1",
-    "react-native": "0.57.7",
-    "react-native-material-ui": "^1.30.1",
-    "react-native-typescript-transformer": "^1.2.10",
+    "react": "^16.6.1",
+    "react-native": "^0.57.7",
+    "react-native-gesture-handler": "^1.0.10",
     "react-native-vector-icons": "^6.1.0",
-    "typescript": "^3.2.1"
+    "react-navigation": "^2.18.3",
+    "regenerator-runtime": "^0.13.1"
   },
   "devDependencies": {
-    "babel-jest": "23.6.0",
-    "babel-plugin-transform-decorators-legacy": "^1.3.5",
-    "babel-preset-react-native-stage-0": "^1.0.1",
-    "eslint": "^5.9.0",
+    "@babel/core": "^7.2.0",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^23.4.2",
     "jest": "23.6.0",
     "metro-react-native-babel-preset": "0.50.0",
     "react-test-renderer": "16.6.1",
-    "tslint": "^5.11.0",
-    "tslint-config-prettier": "^1.17.0",
-    "tslint-config-standard": "^8.0.1",
-    "tslint-react": "^3.6.0"
+    "@babel/preset-flow": "^7.0.0"
   },
   "jest": {
     "preset": "react-native"
-  },
-  "plugins": [
-    "transform-decorators-legacy"
-  ]
+  }
 }

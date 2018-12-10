@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, TextInput, Button} from 'react-native';
-import LoginStore from '../store/loginStore';
+import LoginStore from '../store/LoginStore';
 import {action, observable} from "mobx";
 
 const loginStore = new LoginStore();
@@ -9,23 +9,19 @@ export default class Login extends React.Component {
     @observable id: string = '';
     @observable pw: string = '';
 
-    constructor(props:{}) {
-        super(props);
-
-    }
     @action
-    private IdOnChangeHandler = (e: string) => {
+    private idOnChangeHandler = (e: string) => {
         this.id = e;
-        console.log(this.id);
     }
     @action
-    private PwOnChangeHandler = (e: string) => {
+    private pwOnChangeHandler = (e: string) => {
         this.pw = e;
-        console.log(this.pw);
     }
 
     public isLoggedIn = () => {
         loginStore.loggedIn(this.id,this.pw);
+        console.log('in isLoggedIn');
+        this.props.navigation.navigate('TodoScreen')
     }
 
 
@@ -34,11 +30,11 @@ export default class Login extends React.Component {
             <View>
                 <TextInput
                     placeholder={'insert id'}
-                    onChangeText={this.IdOnChangeHandler}
+                    onChangeText={this.idOnChangeHandler}
                 />
                 <TextInput
                     placeholder={'insert password'}
-                    onChangeText={this.PwOnChangeHandler}
+                    onChangeText={this.pwOnChangeHandler}
                 />
                 <Button title={"Login"} onPress={this.isLoggedIn}/>
 
