@@ -1,7 +1,9 @@
 import React from 'react';
-import {View, Text, ToastAndroid, AsyncStorage} from 'react-native'
+import {View, Text, ToastAndroid, AsyncStorage, ToolbarAndroid, StyleSheet} from 'react-native'
 import RootStore from '../store/RootStore';
 import {inject} from "mobx-react";
+import {AxiosResponse, AxiosError} from "axios";
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 type props = {
     rootStore: RootStore;
@@ -19,16 +21,13 @@ export default class TodoList extends React.Component {
 
     public getTodoList = () => {
         const rootStore = this.props.rootStore as RootStore;
-        AsyncStorage.getItem('authToken').then(response =>{
-            console.log('getItem');
-            console.log(response);
-        })
-        rootStore.axiosStore.instance.get('https://practice.alpaca.kr/api/todo/')
-            .then(response => {
+        rootStore.axiosStore.instance.get('/todo/')
+            .then((response: AxiosResponse) => {
                 console.log(response);
                 ToastAndroid.show('불러오기 성공', ToastAndroid.TOP);
+                rootStore.todoStore.setTodoList(response.data);
             })
-            .catch(error => {
+            .catch((error: AxiosError) => {
                 console.log(error);
                 ToastAndroid.show('불러오기 실패', ToastAndroid.TOP);
             })
@@ -36,9 +35,21 @@ export default class TodoList extends React.Component {
 
     render() {
         return(
-            <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-                <Text>TodoList Screen</Text>
+            <View>
+                <ToolbarAndroid
+                    style={styles.toolbar}
+                    logo={require('../picture/me-as-icon-with-glass-transparent.png')}
+                    title="TodoList"
+                    actions={[{title: 'goBack',icon: require('')}]}
+                />
             </View>
         )
     }
 }
+const styles = StyleSheet.create({
+    toolbar: {
+        backgroundColor: '#2196F3',
+        height: 56,
+        alignSelf: 'stretch'
+    },
+})

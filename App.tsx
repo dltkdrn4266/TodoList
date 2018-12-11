@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
-import {StyleSheet} from 'react-native';
-import {Switch} from "./src/navigators/navigators";
+import {StyleSheet, ToolbarAndroid, View} from 'react-native';
+import {Drawer} from "./src/navigators/navigators";
 import RootStore from "./src/store/RootStore";
 import {Provider} from "mobx-react";
+import {Toolbar} from 'react-native-material-ui';
+
 
 const styles = StyleSheet.create({
     container: {
@@ -23,7 +25,7 @@ export default class App extends Component {
         const rootStore = new RootStore();
         return (
             <Provider rootStore={rootStore}>
-                <Switch />
+                <Drawer />
             </Provider>
         );
     }

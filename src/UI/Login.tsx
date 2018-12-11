@@ -1,8 +1,9 @@
 import React from 'react';
-import {View, TextInput, Button, AsyncStorage, ToastAndroid} from 'react-native';
+import {View, TextInput, Button, AsyncStorage, ToastAndroid, ToolbarAndroid, StyleSheet} from 'react-native';
 import {action, observable} from "mobx";
 import RootStore from "../store/RootStore";
 import {inject} from "mobx-react";
+import {AxiosError, AxiosResponse} from "axios";
 
 type props = {
     rootStore: RootStore;
@@ -12,6 +13,9 @@ export default class Login extends React.Component {
     constructor(props: props){
         super(props);
         const rootStore = this.props.rootStore as RootStore;
+        if(rootStore.loginStore.isLoggedIn) {
+            this.props.navigation.navigate('TodoScreen');
+        }
     }
     @observable id: string = '';
     @observable pw: string = '';
@@ -31,17 +35,14 @@ export default class Login extends React.Component {
         rootStore.axiosStore.instance.post('https://practice.alpaca.kr/api/users/login/', {
             username: this.id,
             password: this.pw
-        }).then(response => {
+        }).then((response: AxiosResponse) => {
             AsyncStorage.setItem('authToken', response.data.authToken)
                 .then(() => {
                     rootStore.axiosStore.changeInstance().then(() => {
-                        console.log('instance@');
-                        console.log(rootStore.axiosStore.instance);
-                        console.log('instance@');
                         this.props.navigation.navigate('TodoScreen');
                     });
                 })
-                .catch(error => {
+                .catch((error: AxiosError) => {
                     console.log(error);
                 });
             ToastAndroid.show('로그인 성공', ToastAndroid.BOTTOM);
@@ -54,6 +55,11 @@ export default class Login extends React.Component {
     render(){
         return(
             <View>
+                <ToolbarAndroid
+                    style={styles.toolbar}
+                    logo={require('../picture/me-as-icon-with-glass-transparent.png')}
+                    title="TodoList"
+                />
                 <TextInput
                     placeholder={'insert id'}
                     onChangeText={this.idOnChangeHandler}
@@ -67,3 +73,11 @@ export default class Login extends React.Component {
         );
     }
 }
+
+const styles = StyleSheet.create({
+    toolbar: {
+        backgroundColor: '#2196F3',
+        height: 56,
+        alignSelf: 'stretch'
+    },
+})
