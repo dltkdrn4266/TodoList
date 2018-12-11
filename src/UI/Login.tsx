@@ -1,11 +1,18 @@
 import React from 'react';
-import {View, TextInput, Button} from 'react-native';
-import LoginStore from '../store/LoginStore';
+import {View, TextInput, Button, AsyncStorage, ToastAndroid} from 'react-native';
 import {action, observable} from "mobx";
+import RootStore from "../store/RootStore";
+import {inject} from "mobx-react";
 
-const loginStore = new LoginStore();
-
+type props = {
+    rootStore: RootStore;
+}
+@inject('rootStore')
 export default class Login extends React.Component {
+    constructor(props: props){
+        super(props);
+        const rootStore = this.props.rootStore as RootStore;
+    }
     @observable id: string = '';
     @observable pw: string = '';
 
@@ -18,10 +25,29 @@ export default class Login extends React.Component {
         this.pw = e;
     }
 
-    public isLoggedIn = () => {
-        loginStore.loggedIn(this.id,this.pw);
-        console.log('in isLoggedIn');
-        this.props.navigation.navigate('TodoScreen')
+    @action
+    public loggedIn = () => {
+        const rootStore = this.props.rootStore as RootStore
+        console.log(rootStore.axiosStore.isLoggedIn);
+        if(rootStore.axiosStore.isLoggedIn) {
+            rootStore.axiosStore.instance.post('https://practice.alpaca.kr/api/users/login/', {
+                username: this.id,
+                password: this.pw
+            }).then(response => {
+                AsyncStorage.setItem('authToken', response.data.authToken)
+                    .then(() => {
+                        rootStore.axiosStore.changeInstance();
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+                ToastAndroid.show('로그인 성공', ToastAndroid.BOTTOM);
+                this.props.navigation.navigate('TodoScreen');
+            }).catch(error => {
+                console.log(error);
+                ToastAndroid.show('로그인 실패', ToastAndroid.BOTTOM);
+            })
+        }
     }
 
 
@@ -36,10 +62,7 @@ export default class Login extends React.Component {
                     placeholder={'insert password'}
                     onChangeText={this.pwOnChangeHandler}
                 />
-                <Button title={"Login"} onPress={this.isLoggedIn}/>
-
-                {console.log('id' + this.id)}
-                {console.log('pw' + this.pw)}
+                <Button title={"Login"} onPress={this.loggedIn}/>
             </View>
         );
     }

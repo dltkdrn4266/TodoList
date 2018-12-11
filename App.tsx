@@ -1,13 +1,8 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {Switch} from "./src/navigators/navigators";
-
-// const RootStack = createStackNavigator({
-//     Home: {
-//         screen: LoginScreen,
-//         TodoScreen: TodoScreen
-//     },
-// })
+import RootStore from "./src/store/RootStore";
+import {Provider} from "mobx-react";
 
 const styles = StyleSheet.create({
     container: {
@@ -25,7 +20,12 @@ const styles = StyleSheet.create({
 
 export default class App extends Component {
     render() {
-        return <Switch />;
+        const rootStore = new RootStore();
+        return (
+            <Provider rootStore={rootStore}>
+                <Switch />
+            </Provider>
+        );
     }
 }
 

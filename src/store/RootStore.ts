@@ -1,11 +1,15 @@
-import {} from './AxiosStore';
+import AxiosStore from './AxiosStore';
 import LoginStore from './LoginStore';
+import TodoStore from './TodoStore';
 
 export default class RootStore {
+    public axiosStore: AxiosStore;
+    public loginStore: LoginStore;
+    public todoStore: TodoStore;
 
-    // public loginStore: LoginStore;
-
-    // constructor(){
-    //     this.loginStore = new LoginStore(this);
-    // }
+    constructor(){
+        this.axiosStore = new AxiosStore(this);
+        this.loginStore = new LoginStore(this);
+        this.todoStore = new TodoStore(this);
+    }
 }
