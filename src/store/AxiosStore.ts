@@ -5,18 +5,15 @@ import {AsyncStorage} from "react-native";
 
 export default class AxiosStore {
     @observable public instance = axios.create(undefined);
-    @observable public isLoggedIn: boolean;
     private rootStore: RootStore;
     private temp?: string = '';
 
     constructor(rootStore: RootStore){
         this.rootStore = rootStore;
-        this.isLoggedIn = true;
-        console.log('instance');
-        console.log(this.instance);
     }
 
     private retrieveData = async () => {
+        console.log('retrieveData!!');
         try {
             const value = await AsyncStorage.getItem('authToken');
             if (value !== null) {
@@ -26,21 +23,18 @@ export default class AxiosStore {
             console.log(error);
         }
     }
-
     @action
     public changeInstance = () => {
-        this.retrieveData().then(() => {
-            console.log('Token ' + this.temp);
-            console.log('in retrieveData');
-            this.rootStore.axiosStore.instance = axios.create({
-                baseURL: 'https://practice.alpaca.kr/api/',
-                headers: { 'Authorization': 'Token ' + this.temp }
+        return new Promise((resolve) => {
+            this.retrieveData().then(() => {
+                console.log('Token ' + this.temp);
+                console.log('in retrieveData');
+                this.rootStore.axiosStore.instance = axios.create({
+                    baseURL: 'https://practice.alpaca.kr/api/',
+                    headers: { 'Authorization': 'Token ' + this.temp }
+                })
+                resolve();
             })
-            console.log('instance!');
-            console.log(this.instance);
         })
-        // if(this.instance !== undefined){
-        //     this.isLoggedIn = true;
-        // }
     }
 }

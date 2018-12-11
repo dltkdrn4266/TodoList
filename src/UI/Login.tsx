@@ -28,28 +28,28 @@ export default class Login extends React.Component {
     @action
     public loggedIn = () => {
         const rootStore = this.props.rootStore as RootStore
-        console.log(rootStore.axiosStore.isLoggedIn);
-        if(rootStore.axiosStore.isLoggedIn) {
-            rootStore.axiosStore.instance.post('https://practice.alpaca.kr/api/users/login/', {
-                username: this.id,
-                password: this.pw
-            }).then(response => {
-                AsyncStorage.setItem('authToken', response.data.authToken)
-                    .then(() => {
-                        rootStore.axiosStore.changeInstance();
-                    })
-                    .catch(error => {
-                        console.log(error);
+        rootStore.axiosStore.instance.post('https://practice.alpaca.kr/api/users/login/', {
+            username: this.id,
+            password: this.pw
+        }).then(response => {
+            AsyncStorage.setItem('authToken', response.data.authToken)
+                .then(() => {
+                    rootStore.axiosStore.changeInstance().then(() => {
+                        console.log('instance@');
+                        console.log(rootStore.axiosStore.instance);
+                        console.log('instance@');
+                        this.props.navigation.navigate('TodoScreen');
                     });
-                ToastAndroid.show('로그인 성공', ToastAndroid.BOTTOM);
-                this.props.navigation.navigate('TodoScreen');
-            }).catch(error => {
-                console.log(error);
-                ToastAndroid.show('로그인 실패', ToastAndroid.BOTTOM);
-            })
-        }
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+            ToastAndroid.show('로그인 성공', ToastAndroid.BOTTOM);
+        }).catch(error => {
+            console.log(error);
+            ToastAndroid.show('로그인 실패', ToastAndroid.BOTTOM);
+        })
     }
-
 
     render(){
         return(

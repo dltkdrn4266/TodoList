@@ -12,6 +12,13 @@ export default class TodoList extends React.Component {
     constructor(props: props) {
         super(props);
         const rootStore = this.props.rootStore as RootStore;
+        rootStore.axiosStore.changeInstance().then(() => {
+            this.getTodoList();
+        });
+    }
+
+    public getTodoList = () => {
+        const rootStore = this.props.rootStore as RootStore;
         AsyncStorage.getItem('authToken').then(response =>{
             console.log('getItem');
             console.log(response);
@@ -26,8 +33,6 @@ export default class TodoList extends React.Component {
                 ToastAndroid.show('불러오기 실패', ToastAndroid.TOP);
             })
     }
-
-
 
     render() {
         return(
