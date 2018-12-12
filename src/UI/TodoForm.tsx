@@ -1,25 +1,39 @@
 import React from 'react';
-import {View, Text, ToolbarAndroid, StyleSheet} from "react-native";
+import {View, Text, StyleSheet} from "react-native";
+import {todoSerializers} from "../Serializers";
+import { CheckBox } from 'react-native-elements';
+import {action, observable} from "mobx";
+import {observer} from "mobx-react";
 
-export default class TodoForm extends React.Component {
+interface IProps extends todoSerializers{
+
+}
+
+@observer
+export default class TodoForm extends React.Component<IProps,{}> {
+    @observable checked: boolean = false;
+
+    @action
+    private onCheckHandler = () => {
+        this.checked = !this.checked;
+    }
+
     render() {
         return(
-            <View>
-                <ToolbarAndroid
-                    style={styles.toolbar}
-                    logo={require('../picture/me-as-icon-with-glass-transparent.png')}
-                    title="TodoList"
+            <View style={styles.View}>
+                <CheckBox
+                    title={this.props.content}
+                    checked={this.checked}
+                    onPress={this.onCheckHandler}
                 />
-                <Text>TodoForm</Text>
             </View>
         )
     }
 }
 
 const styles = StyleSheet.create({
-    toolbar: {
-        backgroundColor: '#2196F3',
-        height: 56,
-        alignSelf: 'stretch'
-    },
+    View: {
+        flex: 1,
+        flexDirection: 'column',
+    }
 })

@@ -5,16 +5,16 @@ import RootStore from "../store/RootStore";
 import {inject} from "mobx-react";
 import {AxiosError, AxiosResponse} from "axios";
 
-type props = {
+interface IProps {
     rootStore: RootStore;
 }
 @inject('rootStore')
-export default class Login extends React.Component {
-    constructor(props: props){
+export default class Login extends React.Component<IProps,{}> {
+    constructor(props: IProps){
         super(props);
         const rootStore = this.props.rootStore as RootStore;
-        if(rootStore.loginStore.isLoggedIn) {
-            this.props.navigation.navigate('TodoScreen');
+        if(rootStore.loginStore.isLoggedIn === false) {
+            this.props.navigation.navigate('todoFormScreen');
         }
     }
     @observable id: string = '';

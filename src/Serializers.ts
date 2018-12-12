@@ -1,16 +1,16 @@
-export class userSerializers {
-    public id: number;
-    public username: string;
-    public authToken: string;
-    public name: string;
+export interface userSerializers {
+    id: number;
+    username: string;
+    authToken: string;
+    name: string;
 }
 
-export class todoSerializers {
-    public id: number;
-    public content: string;
-    public user: userSerializers;
-    public like: number;
-    public createdAt: string;
-    public completedAt: string;
-    public isCompleted: boolean
+export interface todoSerializers {
+    id: number;
+    content: string;
+    user: userSerializers;
+    like: number;
+    createdAt: string;
+    completedAt: string;
+    isCompleted: boolean
 }

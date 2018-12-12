@@ -3,8 +3,17 @@ import {StyleSheet, ToolbarAndroid, View} from 'react-native';
 import {Drawer} from "./src/navigators/navigators";
 import RootStore from "./src/store/RootStore";
 import {Provider} from "mobx-react";
-import {Toolbar} from 'react-native-material-ui';
 
+export default class App extends Component {
+    render() {
+        const rootStore = new RootStore();
+        return (
+            <Provider rootStore={rootStore}>
+                <Drawer />
+            </Provider>
+        );
+    }
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -19,15 +28,4 @@ const styles = StyleSheet.create({
         margin: 10,
     },
 });
-
-export default class App extends Component {
-    render() {
-        const rootStore = new RootStore();
-        return (
-            <Provider rootStore={rootStore}>
-                <Drawer />
-            </Provider>
-        );
-    }
-}
 

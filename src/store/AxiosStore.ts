@@ -13,7 +13,6 @@ export default class AxiosStore {
     }
 
     private retrieveData = async () => {
-        console.log('retrieveData!!');
         try {
             const value = await AsyncStorage.getItem('authToken');
             if (value !== null) {
@@ -27,8 +26,6 @@ export default class AxiosStore {
     public changeInstance = () => {
         return new Promise((resolve) => {
             this.retrieveData().then(() => {
-                console.log('Token ' + this.temp);
-                console.log('in retrieveData');
                 this.rootStore.axiosStore.instance = axios.create({
                     baseURL: 'https://practice.alpaca.kr/api/',
                     headers: { 'Authorization': 'Token ' + this.temp }
