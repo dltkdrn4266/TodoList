@@ -24,10 +24,14 @@ export default class AxiosStore {
     }
     @action
     public changeInstance = async () => {
-        await this.retrieveData();
-        this.rootStore.axiosStore.instance = axios.create({
-            baseURL: 'https://practice.alpaca.kr/api/',
-            headers: {'Authorization': 'Token ' + this.temp}
-        })
+        try{
+            await this.retrieveData();
+            this.rootStore.axiosStore.instance = axios.create({
+                baseURL: 'https://practice.alpaca.kr/api/',
+                headers: {'Authorization': 'Token ' + this.temp}
+            })
+        }catch (e) {
+            console.log('retrieveData Error');
+        }
     }
 }

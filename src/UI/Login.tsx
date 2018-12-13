@@ -29,7 +29,7 @@ export default class Login extends React.Component<IProps,{}> {
     }
 
     @action
-    public loggedIn = () => {
+    public loggedIn = async () => {
         const rootStore = this.props.rootStore as RootStore
         rootStore.axiosStore.instance.post('https://practice.alpaca.kr/api/users/login/', {
             username: this.id,
@@ -54,9 +54,6 @@ export default class Login extends React.Component<IProps,{}> {
     }
 
     render(){
-        if(this.isLoggedIn){
-            this.props.navigation.navigate('TodoScreen');
-        }
         return(
             <View>
                 <ToolbarAndroid
@@ -73,6 +70,7 @@ export default class Login extends React.Component<IProps,{}> {
                     onChangeText={this.pwOnChangeHandler}
                 />
                 <Button title={"Login"} onPress={this.loggedIn}/>
+
             </View>
         );
     }

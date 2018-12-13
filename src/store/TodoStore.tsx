@@ -5,13 +5,14 @@ import {action, observable} from "mobx";
 import {observer} from "mobx-react";
 
 export default class TodoStore {
-    public TodoList: todoSerializers[] = [];
+    @observable public TodoList: todoSerializers[] = [];
     private rootStore: RootStore;
 
     constructor(rootStore: RootStore){
         this.rootStore = rootStore;
     }
 
+    @action
     public setTodoList = (data: todoSerializers[]) => {
         console.log('set 이전 data의 값');
         console.log(data);
@@ -21,16 +22,27 @@ export default class TodoStore {
     }
 
     public addTodoList = async(data: string) => {
-        await this.rootStore.axiosStore.changeInstance();
-        await this.rootStore.axiosStore.instance.post('/todo/', {
-            content: data
-        })
-            .then(response => {
-                console.log(response);
+
+        try{
+            await this.rootStore.axiosStore.changeInstance();
+        } catch (e) {
+            console.log('changeInstance Error');
+        }
+
+        try{
+            await this.rootStore.axiosStore.instance.post('/todo/', {
+                content: data
             })
-            .catch(error => {
-                console.log(error);
-            })
+                .then(response => {
+                    console.log(response);
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        } catch (e) {
+            console.log('axiosStore.instance.post Error');
+        }
+
     }
 
 

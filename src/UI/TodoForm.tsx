@@ -1,31 +1,23 @@
 import React from 'react';
 import {View, Text, StyleSheet} from "react-native";
 import {todoSerializers} from "../Serializers";
-import {action, observable} from "mobx";
-import {observer} from "mobx-react";
 
-interface IProps extends todoSerializers{
-
+interface IProps{
+    todoSerializers : todoSerializers;
 }
 
-@observer
 export default class TodoForm extends React.Component<IProps,{}> {
-    @observable checked: boolean = false;
-
-    @action
-    private onCheckHandler = () => {
-        this.checked = !this.checked;
-    }
 
     render() {
         return(
             <View style={styles.View}>
-                <Text>{this.props.content}</Text>
-                <Text>{this.props.user}</Text>
-                <Text>{this.props.like}</Text>
-                <Text>{this.props.createdAt}</Text>
-                <Text>{this.props.completedAt}</Text>
-                <Text>{this.props.isCompleted}</Text>
+                <Text>{this.props.todoSerializers.id}</Text>
+                <Text>{this.props.todoSerializers.user}</Text>
+                <Text>{this.props.todoSerializers.like}</Text>
+                <Text>{this.props.todoSerializers.content}</Text>
+                <Text>{this.props.todoSerializers.isCompleted}</Text>
+                <Text>{this.props.todoSerializers.completedAt}</Text>
+                <Text>{this.props.todoSerializers.createdAt}</Text>
             </View>
         )
     }
