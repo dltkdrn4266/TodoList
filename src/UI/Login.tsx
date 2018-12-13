@@ -2,23 +2,22 @@ import React from 'react';
 import {View, TextInput, Button, AsyncStorage, ToastAndroid, ToolbarAndroid, StyleSheet} from 'react-native';
 import {action, observable} from "mobx";
 import RootStore from "../store/RootStore";
-import {inject} from "mobx-react";
+import {inject, observer} from "mobx-react";
 import {AxiosError, AxiosResponse} from "axios";
 
 interface IProps {
     rootStore: RootStore;
 }
 @inject('rootStore')
+@observer
 export default class Login extends React.Component<IProps,{}> {
+    @observable private id: string = '';
+    @observable private pw: string = '';
+    @observable private isLoggedIn: boolean = true;
+
     constructor(props: IProps){
         super(props);
-        const rootStore = this.props.rootStore as RootStore;
-        if(rootStore.loginStore.isLoggedIn === false) {
-            this.props.navigation.navigate('todoFormScreen');
-        }
     }
-    @observable id: string = '';
-    @observable pw: string = '';
 
     @action
     private idOnChangeHandler = (e: string) => {
@@ -39,10 +38,12 @@ export default class Login extends React.Component<IProps,{}> {
             AsyncStorage.setItem('authToken', response.data.authToken)
                 .then(() => {
                     rootStore.axiosStore.changeInstance().then(() => {
+                        this.isLoggedIn = true;
                         this.props.navigation.navigate('TodoScreen');
                     });
                 })
                 .catch((error: AxiosError) => {
+                    this.isLoggedIn = false;
                     console.log(error);
                 });
             ToastAndroid.show('로그인 성공', ToastAndroid.BOTTOM);
@@ -53,6 +54,9 @@ export default class Login extends React.Component<IProps,{}> {
     }
 
     render(){
+        if(this.isLoggedIn){
+            this.props.navigation.navigate('TodoScreen');
+        }
         return(
             <View>
                 <ToolbarAndroid

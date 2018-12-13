@@ -6,9 +6,9 @@ import {AsyncStorage} from "react-native";
 export default class AxiosStore {
     @observable public instance = axios.create(undefined);
     private rootStore: RootStore;
-    private temp?: string = '';
+    private temp: string = '';
 
-    constructor(rootStore: RootStore){
+    constructor(rootStore: RootStore) {
         this.rootStore = rootStore;
     }
 
@@ -23,15 +23,11 @@ export default class AxiosStore {
         }
     }
     @action
-    public changeInstance = () => {
-        return new Promise((resolve) => {
-            this.retrieveData().then(() => {
-                this.rootStore.axiosStore.instance = axios.create({
-                    baseURL: 'https://practice.alpaca.kr/api/',
-                    headers: { 'Authorization': 'Token ' + this.temp }
-                })
-                resolve();
-            })
+    public changeInstance = async () => {
+        await this.retrieveData();
+        this.rootStore.axiosStore.instance = axios.create({
+            baseURL: 'https://practice.alpaca.kr/api/',
+            headers: {'Authorization': 'Token ' + this.temp}
         })
     }
 }

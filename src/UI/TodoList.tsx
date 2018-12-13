@@ -4,34 +4,42 @@ import RootStore from '../store/RootStore';
 import {inject} from "mobx-react";
 import {AxiosResponse, AxiosError} from "axios";
 import TodoForm from "./TodoForm";
+import {action, observable} from "mobx";
+import {NavigationProp} from "react-navigation";
 
 type IProps = {
     rootStore: RootStore;
+    // navigation: NavigationProp<???>;
 }
 @inject('rootStore')
 export default class TodoList extends React.Component<IProps,{}> {
 
+    @observable protected todoList: any = [];
+
     constructor(props: IProps) {
         super(props);
-        // const rootStore = this.props.rootStore as RootStore;
-        // rootStore.axiosStore.changeInstance().then(() => {
-        //     this.getTodoList().then(() => {
-        //         this.showTodoList();
-        //     });
-        // });
-        this.getTodoList().then(() => {
-            this.showTodoList();
-        })
+        this.todoList = [<View style={{flex: 1,justifyContent: 'center', alignItems: 'center'}}>
+                            <Text>빈값이네요 ㅠㅠ</Text>
+                         </View>]
     }
 
-    public showTodoList = () => {
+    public async componentDidMount() {
+        console.log('componentDidMount in');
+        await this.getTodoList();
+        this.setTodoView();
+        console.log(this.todoList);
+        console.log('componentDidMount out');
+    }
+
+    @action
+    public setTodoView = () => {
+        console.log('setTodoView in');
         const rootStore = this.props.rootStore as RootStore;
-        console.log('showTodoList');
-        let todoView: any = [];
         console.log('안녕 밑에있는건 rootStore.todoStore.TodoList야!')
         console.log(rootStore.todoStore.TodoList);
         console.log('잘가');
         for(const todoId in rootStore.todoStore.TodoList) {
+            console.log('for in');
             if(todoId !== null) {
                 const createdDate = new Date(rootStore.todoStore.TodoList[todoId].createdAt);
                 const createdYear = createdDate.getFullYear();
@@ -49,42 +57,42 @@ export default class TodoList extends React.Component<IProps,{}> {
 
                 const completedAt = completedYear + '/' + completedMonth + '/' + completedDay + '   ' + completedHour + '시' + completedMinutes + '분';
 
-                todoView = rootStore.todoStore.TodoList.map((todoId) => {
-                    <TodoForm
-                        id={todoId.id}
-                        content={todoId.content}
-                        user={todoId.user}
-                        like={todoId.like}
-                        createdAt={todoId.createdAt}
-                        completedAt={todoId.completedAt}
-                        isCompleted={todoId.isCompleted}
-                    />
+                this.todoList.push(<TodoForm
+                    key={rootStore.todoStore.TodoList[todoId].id}
+                    id={rootStore.todoStore.TodoList[todoId].id}
+                    user={rootStore.todoStore.TodoList[todoId].user}
+                    content={rootStore.todoStore.TodoList[todoId].content}
+                    createdAt={createdYear + '/' + createdMonth + '/' + createdDay + '   ' + createdHour + '시' + createdMinutes + '분'}
+                    like={rootStore.todoStore.TodoList[todoId].like}
+                    isCompleted={rootStore.todoStore.TodoList[todoId].isCompleted}
+                    completedAt={rootStore.todoStore.TodoList[todoId].completedAt ? completedAt : ''}
+                />)
+
+                this.todoList.map((todoId: any) => {
+
                 });
             }
         }
-        console.log('todoView@');
-        console.log(todoView);
-        return todoView;
+        console.log('setTodoView Out');
     }
 
-
-    public getTodoList = () => {
-        return new Promise(resolve => {
-            const rootStore = this.props.rootStore as RootStore;
-            rootStore.axiosStore.changeInstance().then(() => {
-                rootStore.axiosStore.instance.get('/todo/')
-                    .then((response: AxiosResponse) => {
-                        console.log(response);
-                        ToastAndroid.show('불러오기 성공', ToastAndroid.TOP);
-                        rootStore.todoStore.setTodoList(response.data);
-                        resolve();
-                    })
-                    .catch((error: AxiosError) => {
-                        console.log(error);
-                        ToastAndroid.show('불러오기 실패', ToastAndroid.TOP);
-                    })
+    @action
+    public getTodoList = async () => {
+        console.log('getTodoList in')
+        const rootStore = this.props.rootStore as RootStore;
+        await rootStore.axiosStore.changeInstance();
+        await rootStore.axiosStore.instance.get('/todo/')
+            .then((response: AxiosResponse) => {
+                console.log(response);
+                console.log('response 끝!');
+                ToastAndroid.show('불러오기 성공', ToastAndroid.TOP);
+                rootStore.todoStore.setTodoList(response.data);
             })
-        })
+            .catch((error: AxiosError) => {
+                console.log(error);
+                ToastAndroid.show('불러오기 실패', ToastAndroid.TOP);
+            })
+        console.log('getTodoList Out');
     }
 
     private onActionSelected = (position: number) => {
@@ -102,9 +110,8 @@ export default class TodoList extends React.Component<IProps,{}> {
                     actions={[{title: 'Todo 추가하기',icon: require('../picture/long-arrow-alt-left-solid.svg')},]}
                     onActionSelected={this.onActionSelected}
                 />
-                {this.getTodoList().then(() => {
-                    this.showTodoList();
-                })}
+                {console.log('TodoLIST!!!!!')}
+                {/*{this.todoList}*/}
             </View>
         )
     }

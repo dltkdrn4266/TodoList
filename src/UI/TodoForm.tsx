@@ -1,7 +1,6 @@
 import React from 'react';
 import {View, Text, StyleSheet} from "react-native";
 import {todoSerializers} from "../Serializers";
-import { CheckBox } from 'react-native-elements';
 import {action, observable} from "mobx";
 import {observer} from "mobx-react";
 
@@ -21,11 +20,12 @@ export default class TodoForm extends React.Component<IProps,{}> {
     render() {
         return(
             <View style={styles.View}>
-                <CheckBox
-                    title={this.props.content}
-                    checked={this.checked}
-                    onPress={this.onCheckHandler}
-                />
+                <Text>{this.props.content}</Text>
+                <Text>{this.props.user}</Text>
+                <Text>{this.props.like}</Text>
+                <Text>{this.props.createdAt}</Text>
+                <Text>{this.props.completedAt}</Text>
+                <Text>{this.props.isCompleted}</Text>
             </View>
         )
     }
@@ -35,5 +35,9 @@ const styles = StyleSheet.create({
     View: {
         flex: 1,
         flexDirection: 'column',
+    },
+    CheckBox: {
+        width: 40,
+        height: 40
     }
 })
