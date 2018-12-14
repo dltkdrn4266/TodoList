@@ -1,18 +1,19 @@
 import React from 'react';
-import {View, Text, ToastAndroid, AsyncStorage, ToolbarAndroid, StyleSheet} from 'react-native'
+import {View, Text, ToastAndroid, AsyncStorage, ToolbarAndroid, StyleSheet, ScrollView} from 'react-native'
 import RootStore from '../store/RootStore';
-import {inject} from "mobx-react";
+import {inject, observer} from "mobx-react";
 import {AxiosResponse, AxiosError} from "axios";
 import TodoForm from "./TodoForm";
 import {action, observable} from "mobx";
 import {NavigationProp} from "react-navigation";
-import {todoSerializers} from "../Serializers";
+import {ITodoSerializers} from "../Serializers";
 
-type IProps = {
+interface IProps {
     rootStore: RootStore;
     // navigation: NavigationProp<???>;
 }
 @inject('rootStore')
+@observer
 export default class TodoList extends React.Component<IProps,{}> {
 
     constructor(props: IProps) {
@@ -31,13 +32,13 @@ export default class TodoList extends React.Component<IProps,{}> {
         console.log('getTodoList in')
         const rootStore = this.props.rootStore as RootStore;
         await rootStore.axiosStore.changeInstance();
-        await rootStore.axiosStore.instance.get('/todo/')
+        await rootStore.axiosStore.instance.get<ITodoSerializers>('/todo/')
             .then((response: AxiosResponse) => {
                 console.log(response);
                 console.log('response 끝!');
+                rootStore.todoStore.setTodoList(response.data);
                 ToastAndroid.show('불러오기 성공', ToastAndroid.TOP);
                 rootStore.loginStore.isLoggedIn = true;
-                rootStore.todoStore.setTodoList(response.data);
             })
             .catch((error: AxiosError) => {
                 console.log(error);
@@ -57,19 +58,20 @@ export default class TodoList extends React.Component<IProps,{}> {
         if(this.props.rootStore.loginStore.isLoggedIn){
             this.props.navigation.navigate('TodoScreen');
         }
+        console.log('TodoList render');
         return(
-            <View>
-                <ToolbarAndroid
-                    style={styles.toolbar}
-                    title="TodoList"
-                    actions={[{title: 'Todo 추가하기',icon: require('../picture/long-arrow-alt-left-solid.svg')},]}
-                    onActionSelected={this.onActionSelected}
-                />
-                {console.log('TodoLIST!!!!!')}
-                {this.props.rootStore.todoStore.TodoList.map((item) => (
-                    <TodoForm todoSerializers={item} />
-                ))}
-            </View>
+            <ScrollView style={styles.scrollView} >
+                    <ToolbarAndroid
+                        style={styles.toolbar}
+                        title="TodoList"
+                        actions={[{title: 'Todo 추가하기',icon: require('../picture/long-arrow-alt-left-solid.svg')},]}
+                        onActionSelected={this.onActionSelected}
+                    />
+                    {console.log('TodoLIST!!!!!')}
+                    <View>{this.props.rootStore.todoStore.TodoList.map((item) => (
+                        <TodoForm key={item.id} todoSerializers={item} />
+                    ))}</View>
+            </ScrollView>
         )
     }
 }
@@ -79,4 +81,8 @@ const styles = StyleSheet.create({
         height: 56,
         alignSelf: 'stretch'
     },
+    scrollView: {
+        flex: 1,
+        height: 'auto'
+    }
 })

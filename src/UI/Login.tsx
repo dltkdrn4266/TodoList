@@ -4,6 +4,7 @@ import {action, observable} from "mobx";
 import RootStore from "../store/RootStore";
 import {inject, observer} from "mobx-react";
 import {AxiosError, AxiosResponse} from "axios";
+import {ITodoSerializers, IUserSerializers} from "../Serializers";
 
 interface IProps {
     rootStore: RootStore;
@@ -31,26 +32,28 @@ export default class Login extends React.Component<IProps,{}> {
     @action
     public loggedIn = async () => {
         const rootStore = this.props.rootStore as RootStore
-        rootStore.axiosStore.instance.post('https://practice.alpaca.kr/api/users/login/', {
-            username: this.id,
-            password: this.pw
-        }).then((response: AxiosResponse) => {
-            AsyncStorage.setItem('authToken', response.data.authToken)
-                .then(() => {
-                    rootStore.axiosStore.changeInstance().then(() => {
-                        this.isLoggedIn = true;
-                        this.props.navigation.navigate('TodoScreen');
+        try {
+            await rootStore.axiosStore.instance.post<IUserSerializers>('https://practice.alpaca.kr/api/users/login/', {
+                username: this.id,
+                password: this.pw
+            }).then(async (response: AxiosResponse) => {
+                await AsyncStorage.setItem('authToken', response.data.authToken)
+                    .then(() => {
+                        rootStore.axiosStore.changeInstance().then(() => {
+                            this.isLoggedIn = true;
+                            this.props.navigation.navigate('TodoScreen');
+                        });
+                    })
+                    .catch((error: AxiosError) => {
+                        this.isLoggedIn = false;
+                        console.log(error);
                     });
-                })
-                .catch((error: AxiosError) => {
-                    this.isLoggedIn = false;
-                    console.log(error);
-                });
-            ToastAndroid.show('로그인 성공', ToastAndroid.BOTTOM);
-        }).catch(error => {
+                ToastAndroid.show('로그인 성공', ToastAndroid.BOTTOM);
+            })
+        } catch (error) {
             console.log(error);
             ToastAndroid.show('로그인 실패', ToastAndroid.BOTTOM);
-        })
+        }
     }
 
     render(){

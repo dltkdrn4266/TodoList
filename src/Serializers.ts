@@ -1,10 +1,10 @@
-export interface userSerializers {
+export interface IUserSerializers {
     id: number;
     username: string;
     authToken: string;
     name: string;
 }
-export class user implements userSerializers{
+export class user{
     public id: number;
     public username: string;
     public authToken: string;
@@ -18,7 +18,7 @@ export class user implements userSerializers{
     }
 }
 
-export interface todoSerializers {
+export interface ITodoSerializers {
     id: number;
     content: string;
     user: user;
