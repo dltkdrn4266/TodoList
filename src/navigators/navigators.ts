@@ -2,9 +2,6 @@ import Login from '../UI/Login';
 import TodoList from '../UI/TodoList';
 import addTodoScreen from "../UI/addTodoScreen";
 import {
-    StackNavigator,
-    DrawerNavigator,
-    DrawerItems,
     createStackNavigator,
     createDrawerNavigator
 } from "react-navigation";

@@ -54,6 +54,7 @@ export default class TodoForm extends React.Component<IProps,{}> {
         }
     }
 
+    // TODO: 좋아요 누르면 딜레이가 심함 코드리펙토링 필요
     @action
     private onPressHeartButton = async () => {
         const rootStore = this.props.rootStore as RootStore;

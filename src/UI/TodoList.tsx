@@ -5,12 +5,12 @@ import {inject, observer} from "mobx-react";
 import {AxiosResponse, AxiosError} from "axios";
 import TodoForm from "./TodoForm";
 import {action, observable} from "mobx";
-import {NavigationProp} from "react-navigation";
+import {NavigationProp, NavigationScreenProp} from "react-navigation";
 import {ITodoSerializers} from "../Serializers";
 
 interface IProps {
     rootStore: RootStore;
-    // navigation: NavigationProp<???>;
+    navigation: NavigationScreenProp<{}>;
 }
 @inject('rootStore')
 @observer

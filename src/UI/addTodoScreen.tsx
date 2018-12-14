@@ -4,9 +4,11 @@ import {Button} from "react-native-material-ui";
 import {action, observable} from "mobx";
 import {inject, observer} from "mobx-react";
 import RootStore from "../store/RootStore";
+import {NavigationScreenProp} from "react-navigation";
 
 interface IProps {
     rootStore: RootStore;
+    navigation: NavigationScreenProp<{}>;
 }
 
 @inject('rootStore')

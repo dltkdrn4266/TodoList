@@ -4,10 +4,12 @@ import {action, observable} from "mobx";
 import RootStore from "../store/RootStore";
 import {inject, observer} from "mobx-react";
 import {AxiosError, AxiosResponse} from "axios";
-import {ITodoSerializers, IUserSerializers} from "../Serializers";
+import {IUserSerializers} from "../Serializers";
+import {NavigationScreenProp} from "react-navigation";
 
 interface IProps {
     rootStore: RootStore;
+    navigation: NavigationScreenProp<{}>;
 }
 @inject('rootStore')
 @observer
