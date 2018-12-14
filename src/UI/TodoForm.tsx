@@ -16,12 +16,42 @@ interface IProps{
 export default class TodoForm extends React.Component<IProps,{}> {
 
     @observable like: number;
+    public createTime: string;
+    @observable public completeTime: string = '';
 
     constructor(props: IProps){
         super(props);
         this.like = this.props.todoSerializers.like;
         console.log('completedAt');
         console.log(this.props.todoSerializers.completedAt);
+
+        const createDate = new Date(this.props.todoSerializers.createdAt);
+        const createYear = createDate.getFullYear();
+        const createMonth = createDate.getMonth();
+        const createDay =  createDate.getDate();
+        const createHour = createDate.getHours();
+        const createMinute = createDate.getMinutes();
+        this.createTime =  createYear + '년' + createMonth + '월' + createDay + '일' +  ' ' +
+            createHour + '시' + createMinute + '분';
+        this.setCompleteTime();
+    }
+
+    @action
+    private setCompleteTime = () => {
+        console.log('completedAt@');
+        console.log(this.props.todoSerializers.completedAt);
+        if(this.props.todoSerializers.completedAt !== null) {
+            const completeDate = new Date(this.props.todoSerializers.completedAt);
+            const completeYear = completeDate.getFullYear();
+            const completeMonth = completeDate.getMonth();
+            const completeDay = completeDate.getDate();
+            const completeHour = completeDate.getHours();
+            const completeMinute = completeDate.getMinutes();
+            this.completeTime = completeYear + '년' + completeMonth + '월' + completeDay + '일' + ' ' +
+                completeHour + '시' + completeMinute + '분';
+        }else {
+            this.completeTime = '완료되지 않았음';
+        }
     }
 
     @action
@@ -43,6 +73,8 @@ export default class TodoForm extends React.Component<IProps,{}> {
             console.log(error);
         }
     }
+
+    @action
     // 코드진짜더럽.. 가독성어디?
     private onPressCompleteButton = async () => {
         const rootStore = this.props.rootStore as RootStore;
@@ -53,16 +85,16 @@ export default class TodoForm extends React.Component<IProps,{}> {
         const completeDay = completeDate.getDate();
         const completeHour = completeDate.getHours();
         const completeMinute = completeDate.getMinutes();
-        const completeTime = completeYear + '년' + completeMonth + '월' + completeDay + '일' +  ' ' +
+        this.completeTime = completeYear + '년' + completeMonth + '월' + completeDay + '일' + ' ' +
             completeHour + '시' + completeMinute + '분';
 
         try {
             await rootStore.todoStore.completeTodo(this.props.todoSerializers.id);
             rootStore.todoStore.TodoList[rootStore.todoStore.TodoList.indexOf(this.props.todoSerializers)]
-                .completedAt = completeTime 
+                .completedAt = this.completeTime;
             console.log('$$$');
             console.log(rootStore.todoStore.TodoList[rootStore.todoStore.TodoList.indexOf(this.props.todoSerializers)]
-                .completedAt)
+                .completedAt);
             rootStore.todoStore.TodoList[rootStore.todoStore.TodoList.indexOf(this.props.todoSerializers)]
                 .isCompleted = true;
         } catch (error) {
@@ -70,6 +102,7 @@ export default class TodoForm extends React.Component<IProps,{}> {
         }
     }
 
+    @action
     private onPressRevertButton = async() => {
         const rootStore = this.props.rootStore as RootStore;
         try{
@@ -86,9 +119,9 @@ export default class TodoForm extends React.Component<IProps,{}> {
             <View style={styles.rowView}>
                 <View style={styles.columnView}>
                     <Text>{this.props.todoSerializers.content}</Text>
-                    <Text>{this.props.todoSerializers.createdAt}</Text>
+                    <Text>{this.createTime}</Text>
                     <Text>{this.props.todoSerializers.isCompleted}</Text>
-                    <Text>{this.props.todoSerializers.completedAt}</Text>
+                    <Text>{this.props.todoSerializers.isCompleted ? this.completeTime : ''}</Text>
                 </View>
                 <View style={styles.iconButton}>
                     <Icon.Button name="heart" backgroundColor={'#f44242'} size={18} onPress={this.onPressHeartButton}>
@@ -126,5 +159,6 @@ const styles = StyleSheet.create({
     },
     iconButton: {
         width: 'auto'
-    }
+    },
+
 })

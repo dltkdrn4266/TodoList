@@ -68,9 +68,9 @@ export default class TodoList extends React.Component<IProps,{}> {
                         onActionSelected={this.onActionSelected}
                     />
                     {console.log('TodoLIST!!!!!')}
-                    <View>{this.props.rootStore.todoStore.TodoList.map((item) => (
+                    {this.props.rootStore.todoStore.TodoList.map((item) => (
                         <TodoForm key={item.id} todoSerializers={item} />
-                    ))}</View>
+                    ))}
             </ScrollView>
         )
     }

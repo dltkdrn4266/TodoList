@@ -23,7 +23,6 @@ export default class TodoStore {
     }
 
     public addTodoList = async(data: string) => {
-
         try{
             await this.rootStore.axiosStore.changeInstance();
         } catch (e) {
@@ -69,7 +68,7 @@ export default class TodoStore {
     }
     public revertTodo = async (id: number) => {
         try{
-            const response = await this.rootStore.axiosStore.instance.post<ITodoSerializers>('/todo/' + id + 'revert_complete/');
+            const response = await this.rootStore.axiosStore.instance.post<ITodoSerializers>('/todo/' + id + '/revert_complete/');
             console.log(response);
         } catch (error) {
             console.log(error);
