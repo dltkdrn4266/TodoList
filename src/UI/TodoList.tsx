@@ -7,6 +7,7 @@ import TodoForm from "./TodoForm";
 import {action, observable} from "mobx";
 import {NavigationProp, NavigationScreenProp} from "react-navigation";
 import {ITodoSerializers} from "../Serializers";
+import Search from "./Search";
 
 interface IProps {
     rootStore: RootStore;
@@ -58,7 +59,6 @@ export default class TodoList extends React.Component<IProps,{}> {
         if(this.props.rootStore.loginStore.isLoggedIn){
             this.props.navigation.navigate('TodoScreen');
         }
-        console.log('TodoList render');
         return(
             <ScrollView style={styles.scrollView} >
                     <ToolbarAndroid
@@ -67,7 +67,7 @@ export default class TodoList extends React.Component<IProps,{}> {
                         actions={[{title: 'Todo 추가하기',icon: require('../picture/long-arrow-alt-left-solid.svg')},]}
                         onActionSelected={this.onActionSelected}
                     />
-                    {console.log('TodoLIST!!!!!')}
+                    <Search rootStore={this.props.rootStore}/>
                     {this.props.rootStore.todoStore.TodoList.map((item) => (
                         <TodoForm key={item.id} todoSerializers={item} />
                     ))}

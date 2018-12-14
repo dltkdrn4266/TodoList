@@ -1,6 +1,6 @@
 import Login from '../UI/Login';
 import TodoList from '../UI/TodoList';
-import addTodoScreen from "../UI/addTodoScreen";
+import addTodoScreen from "../UI/AddTodoScreen";
 import {
     createStackNavigator,
     createDrawerNavigator

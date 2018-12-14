@@ -152,14 +152,16 @@ const styles = StyleSheet.create({
     rowView : {
         flex: 1,
         flexDirection: 'row',
-        marginBottom: 10
+        borderBottomColor: '#47315a',
+        borderBottomWidth: 1,
+        padding: 5
     },
     CheckBox: {
         width: 40,
         height: 40
     },
     iconButton: {
-        width: 'auto'
+        width: 93
     },
 
 })

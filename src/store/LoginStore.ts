@@ -4,7 +4,7 @@ import {AsyncStorage, ToastAndroid} from "react-native";
 
 export default class loginStore {
     private rootStore: RootStore;
-    @observable public isLoggedIn: boolean = false;
+    public isLoggedIn: boolean = false;
 
     constructor(rootStore: RootStore){
         this.rootStore = rootStore;
