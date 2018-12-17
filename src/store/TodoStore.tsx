@@ -24,12 +24,6 @@ export default class TodoStore {
 
     public addTodoList = async(data: string) => {
         try{
-            await this.rootStore.axiosStore.changeInstance();
-        } catch (e) {
-            console.log('changeInstance Error');
-        }
-
-        try{
             await this.rootStore.axiosStore.instance.post('/todo/', {
                 content: data
             })

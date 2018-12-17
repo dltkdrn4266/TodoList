@@ -32,7 +32,6 @@ export default class TodoList extends React.Component<IProps,{}> {
     public getTodoList = async () => {
         console.log('getTodoList in')
         const rootStore = this.props.rootStore as RootStore;
-        await rootStore.axiosStore.changeInstance();
         await rootStore.axiosStore.instance.get<ITodoSerializers>('/todo/')
             .then((response: AxiosResponse) => {
                 console.log(response);

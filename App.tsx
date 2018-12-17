@@ -4,9 +4,15 @@ import {Drawer} from "./src/navigators/navigators";
 import RootStore from "./src/store/RootStore";
 import {Provider} from "mobx-react";
 
+const rootStore = new RootStore();
+
 export default class App extends Component {
+
+    constructor({}){
+        super({});
+    }
+
     render() {
-        const rootStore = new RootStore();
         return (
             <Provider rootStore={rootStore}>
                 <Drawer />

@@ -3,8 +3,8 @@ import {View, Text, StyleSheet} from "react-native";
 import {ITodoSerializers} from "../Serializers";
 import RootStore from "../store/RootStore";
 import {inject, observer} from "mobx-react";
-import Icon from "react-native-vector-icons/FontAwesome";
 import {action, observable} from "mobx";
+import TodoItem from "./TodoItem";
 
 interface IProps{
     key: number,
@@ -15,12 +15,14 @@ interface IProps{
 @observer
 export default class TodoForm extends React.Component<IProps,{}> {
 
-    @observable like: number;
-    public createTime: string;
-    @observable public completeTime: string = '';
+    protected createTime: string;
+    @observable protected like: number;
+    @observable protected completeTime: string = '';
 
     constructor(props: IProps){
         super(props);
+        console.log('like');
+        console.log(this.props.todoSerializers.like);
         this.like = this.props.todoSerializers.like;
         console.log('completedAt');
         console.log(this.props.todoSerializers.completedAt);
@@ -54,13 +56,16 @@ export default class TodoForm extends React.Component<IProps,{}> {
         }
     }
 
-    // TODO: 좋아요 누르면 딜레이가 심함 코드리펙토링 필요
+    // TODO: 좋아요 누르면 딜레이가 심함 리팩토링 필요
     @action
     private onPressHeartButton = async () => {
         const rootStore = this.props.rootStore as RootStore;
         try{
             await rootStore.axiosStore.instance.post('/todo/' + this.props.todoSerializers.id + '/add_like/')
             this.like = this.like + 1;
+            // rootStore.todoStore.TodoList[rootStore.todoStore.TodoList.indexOf(this.props.todoSerializers)]
+            //     .like = rootStore.todoStore.TodoList[rootStore.todoStore.TodoList.indexOf(this.props.todoSerializers)]
+            //     .like + 1;
         } catch (error) {
             console.log(error);
         }
@@ -118,27 +123,16 @@ export default class TodoForm extends React.Component<IProps,{}> {
     render() {
         return(
             <View style={styles.rowView}>
-                <View style={styles.columnView}>
-                    <Text>{this.props.todoSerializers.content}</Text>
-                    <Text>{this.createTime}</Text>
-                    <Text>{this.props.todoSerializers.isCompleted}</Text>
-                    <Text>{this.props.todoSerializers.isCompleted ? this.completeTime : ''}</Text>
-                </View>
-                <View style={styles.iconButton}>
-                    <Icon.Button name="heart" backgroundColor={'#f44242'} size={18} onPress={this.onPressHeartButton}>
-                        <Text>{this.like}</Text>
-                    </Icon.Button>
-                    <Icon.Button name="trash" backgroundColor={'#2c314f'} size={22} onPress={this.onPressDeleteButton}>
-                        삭제
-                    </Icon.Button>
-                    {this.props.todoSerializers.isCompleted ?
-                    <Icon.Button name="rotate-left" backgroundColor={'#007AFF'} size={20} onPress={this.onPressRevertButton}>
-                        되돌리기
-                    </Icon.Button>:
-                    <Icon.Button name="check" backgroundColor={'#007AFF'} size={20} onPress={this.onPressCompleteButton}>
-                        완료
-                    </Icon.Button>}
-                </View>
+                <TodoItem
+                    todoSerializers={this.props.todoSerializers}
+                    like={this.like}
+                    completeTime={this.completeTime}
+                    createTime={this.createTime}
+                    onPressHeartButton={this.onPressHeartButton}
+                    onPressDeleteButton={this.onPressDeleteButton}
+                    onPressCompleteButton={this.onPressCompleteButton}
+                    onPressRevertButton={this.onPressRevertButton}
+                />
             </View>
         )
     }
@@ -156,7 +150,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         padding: 5
     },
-    CheckBox: {
+    checkBox: {
         width: 40,
         height: 40
     },
