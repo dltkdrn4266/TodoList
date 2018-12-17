@@ -46,6 +46,7 @@ export default class TodoStore {
             const response = await this.rootStore.axiosStore.instance.delete('/todo/' + id + '/');
             this.TodoList.splice(this.TodoList.indexOf(todo),1);
             console.log('delete Response');
+            this.rootStore.calculationTodoStore.allTodo -= 1;
             console.log(response)
         }catch (error) {
             console.log(error);
@@ -56,6 +57,7 @@ export default class TodoStore {
         try{
             const response = await this.rootStore.axiosStore.instance.post<ITodoSerializers>('/todo/' + id + '/complete/');
             console.log(response);
+            this.rootStore.calculationTodoStore.completeTodo += 1;
         } catch (error) {
             console.log(error);
         }
@@ -64,6 +66,7 @@ export default class TodoStore {
         try{
             const response = await this.rootStore.axiosStore.instance.post<ITodoSerializers>('/todo/' + id + '/revert_complete/');
             console.log(response);
+            this.rootStore.calculationTodoStore.completeTodo -= 1;
         } catch (error) {
             console.log(error);
         }

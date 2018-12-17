@@ -18,16 +18,10 @@ interface IProps {
 @observer
 export default class TodoList extends React.Component<IProps,{}> {
 
-    @observable completeTodo: number;
-    @observable allTodo: number;
-    @observable completePercent: number;
 
     constructor(props: IProps) {
         super(props);
 
-        this.allTodo = 0;
-        this.completeTodo = 0;
-        this.completePercent = 0;
     }
 
     public async componentDidMount() {
@@ -47,13 +41,12 @@ export default class TodoList extends React.Component<IProps,{}> {
                 console.log('response 끝!');
                 rootStore.todoStore.setTodoList(response.data);
                 ToastAndroid.show('불러오기 성공', ToastAndroid.TOP);
-                this.allTodo = rootStore.todoStore.TodoList.length;
-                rootStore.loginStore.isLoggedIn = true;
+                rootStore.calculationTodoStore.setAllTodo();
+                rootStore.calculationTodoStore.setCompleteTodo();
             })
             .catch((error: AxiosError) => {
                 console.log(error);
                 ToastAndroid.show('불러오기 실패', ToastAndroid.TOP);
-                rootStore.loginStore.isLoggedIn = false;
             })
         console.log('getTodoList Out');
     }
@@ -70,22 +63,24 @@ export default class TodoList extends React.Component<IProps,{}> {
         }
         return(
             <ScrollView style={styles.scrollView}>
-                    <ToolbarAndroid
-                        style={styles.toolbar}
-                        title="TodoList"
-                        actions={[{title: 'Todo 추가하기',icon: require('../picture/long-arrow-alt-left-solid.svg')},]}
-                        onActionSelected={this.onActionSelected}
-                    />
-                    <CalculationCompleteTodo rootStore={this.props.rootStore}/>
-                    <Search rootStore={this.props.rootStore}/>
-                    {console.log(this.props.rootStore.todoStore.TodoList.indexOf(this.props.rootStore.todoStore.TodoList[0]))}
-                    {this.props.rootStore.todoStore.TodoList.map((item) => (
-                        this.props.rootStore.searchStore.searchWords !== '' ?
-                            item.content.search(this.props.rootStore.searchStore.searchWords) ?
-                            <Text key={item.id}> </Text> :
-                            <TodoForm rootStore={this.props.rootStore} key={item.id} todoSerializers={item} /> :
-                            <TodoForm rootStore={this.props.rootStore} key={item.id} todoSerializers={item} />
-                    ))}
+                <ToolbarAndroid
+                    style={styles.toolbar}
+                    title="TodoList"
+                    actions={[{title: 'Todo 추가하기',icon: require('../picture/long-arrow-alt-left-solid.svg')},]}
+                    onActionSelected={this.onActionSelected}
+                />
+                <CalculationCompleteTodo rootStore={this.props.rootStore}/>
+                {/*<View style={styles.view}>*/}
+                    {/*<Text style={styles.text}>{this.allTodo/this.completeTodo ?*/}
+                        {/*(this.allTodo/this.completeTodo) * 100 : 0}% 완료 ({this.completeTodo}/{this.allTodo})</Text>*/}
+                {/*</View>*/}
+                <Search rootStore={this.props.rootStore}/>
+                {console.log(this.props.rootStore.todoStore.TodoList.indexOf(this.props.rootStore.todoStore.TodoList[0]))}
+                {this.props.rootStore.todoStore.TodoList.map((item) => (
+                    this.props.rootStore.searchStore.searchWords !== '' ?
+                        item.content.search(this.props.rootStore.searchStore.searchWords) ? <Text key={item.id}> </Text> : <TodoForm rootStore={this.props.rootStore} key={item.id} todoSerializers={item} /> :
+                        <TodoForm rootStore={this.props.rootStore} key={item.id} todoSerializers={item} />
+                ))}
             </ScrollView>
         )
     }
@@ -99,5 +94,12 @@ const styles = StyleSheet.create({
     scrollView: {
         flex: 1,
         height: 'auto'
+    },view: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    text: {
+        fontSize: 20
     }
 })

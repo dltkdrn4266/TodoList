@@ -32,6 +32,7 @@ export default class addTodoScreen extends React.Component<IProps,{}> {
             try {
                 const response = await rootStore.todoStore.addTodoList(this.content);
                 ToastAndroid.show('Todo가 추가되었습니다', ToastAndroid.BOTTOM);
+                this.props.rootStore.calculationTodoStore.allTodo += 1;
                 this.props.navigation.navigate('TodoScreen');
             } catch (e) {
                 console.log('addTodoList Error');
