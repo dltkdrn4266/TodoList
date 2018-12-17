@@ -11,6 +11,7 @@ interface IProps{
     todoSerializers : ITodoSerializers;
     rootStore: RootStore;
 }
+
 @inject('rootStore')
 @observer
 export default class TodoForm extends React.Component<IProps,{}> {
@@ -21,11 +22,7 @@ export default class TodoForm extends React.Component<IProps,{}> {
 
     constructor(props: IProps){
         super(props);
-        console.log('like');
-        console.log(this.props.todoSerializers.like);
         this.like = this.props.todoSerializers.like;
-        console.log('completedAt');
-        console.log(this.props.todoSerializers.completedAt);
 
         const createDate = new Date(this.props.todoSerializers.createdAt);
         const createYear = createDate.getFullYear();
@@ -57,6 +54,7 @@ export default class TodoForm extends React.Component<IProps,{}> {
     }
 
     // TODO: 좋아요 누르면 딜레이가 심함 리팩토링 필요
+    // 딜레이가 있는건지 정확하지않음
     @action
     private onPressHeartButton = async () => {
         const rootStore = this.props.rootStore as RootStore;

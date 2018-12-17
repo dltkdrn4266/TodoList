@@ -9,7 +9,6 @@ interface IProps {
 @inject('rootStore')
 @observer
 export default class Search extends React.Component<IProps,{}> {
-
     constructor(props: IProps) {
         super(props);
     }
@@ -20,16 +19,20 @@ export default class Search extends React.Component<IProps,{}> {
 
     render(){
         return(
-            <View>
+            <View style={styles.View}>
                 <TextInput
                     style={styles.TextInput}
                     placeholder='검색어를 입력해주세요'
-                    onChangeText={this.onChangeText}/>
+                    onChangeText={this.onChangeText}
+                />
             </View>
         )
     }
 }
 const styles = StyleSheet.create({
+    View: {
+        paddingHorizontal: 45
+    },
     TextInput: {
         borderBottomWidth: 1
     }

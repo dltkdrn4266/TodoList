@@ -10,10 +10,15 @@ interface IProps {
     rootStore: RootStore;
     navigation: NavigationScreenProp<{}>;
 }
-
+// TODO: Todo 가 늘어날수록 렉이 너무 심해짐
 @inject('rootStore')
 export default class addTodoScreen extends React.Component<IProps,{}> {
     @observable private content: string = '';
+
+
+    constructor(props: IProps) {
+        super(props);
+    }
 
     @action
     private contentOnChangeHandler = (event: string) => {
@@ -32,7 +37,7 @@ export default class addTodoScreen extends React.Component<IProps,{}> {
                 console.log('addTodoList Error');
             }
         } else {
-            ToastAndroid.show('Todo를 입력해주세요',ToastAndroid.BOTTOM);
+            ToastAndroid.show('Todo를 입력해주세요', ToastAndroid.BOTTOM);
         }
     }
 

@@ -8,9 +8,6 @@ const rootStore = new RootStore();
 
 export default class App extends Component {
 
-    constructor({}){
-        super({});
-    }
 
     render() {
         return (

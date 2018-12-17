@@ -5,9 +5,10 @@ import {inject, observer} from "mobx-react";
 import {AxiosResponse, AxiosError} from "axios";
 import TodoForm from "./TodoForm";
 import {action, observable} from "mobx";
-import {NavigationProp, NavigationScreenProp} from "react-navigation";
+import {NavigationScreenProp} from "react-navigation";
 import {ITodoSerializers} from "../Serializers";
 import Search from "./Search";
+import CalculationCompleteTodo from "./CalculationCompleteTodo";
 
 interface IProps {
     rootStore: RootStore;
@@ -17,8 +18,16 @@ interface IProps {
 @observer
 export default class TodoList extends React.Component<IProps,{}> {
 
+    @observable completeTodo: number;
+    @observable allTodo: number;
+    @observable completePercent: number;
+
     constructor(props: IProps) {
         super(props);
+
+        this.allTodo = 0;
+        this.completeTodo = 0;
+        this.completePercent = 0;
     }
 
     public async componentDidMount() {
@@ -38,6 +47,7 @@ export default class TodoList extends React.Component<IProps,{}> {
                 console.log('response 끝!');
                 rootStore.todoStore.setTodoList(response.data);
                 ToastAndroid.show('불러오기 성공', ToastAndroid.TOP);
+                this.allTodo = rootStore.todoStore.TodoList.length;
                 rootStore.loginStore.isLoggedIn = true;
             })
             .catch((error: AxiosError) => {
@@ -59,16 +69,22 @@ export default class TodoList extends React.Component<IProps,{}> {
             this.props.navigation.navigate('TodoScreen');
         }
         return(
-            <ScrollView style={styles.scrollView} >
+            <ScrollView style={styles.scrollView}>
                     <ToolbarAndroid
                         style={styles.toolbar}
                         title="TodoList"
                         actions={[{title: 'Todo 추가하기',icon: require('../picture/long-arrow-alt-left-solid.svg')},]}
                         onActionSelected={this.onActionSelected}
                     />
+                    <CalculationCompleteTodo rootStore={this.props.rootStore}/>
                     <Search rootStore={this.props.rootStore}/>
+                    {console.log(this.props.rootStore.todoStore.TodoList.indexOf(this.props.rootStore.todoStore.TodoList[0]))}
                     {this.props.rootStore.todoStore.TodoList.map((item) => (
-                        <TodoForm key={item.id} todoSerializers={item} />
+                        this.props.rootStore.searchStore.searchWords !== '' ?
+                            item.content.search(this.props.rootStore.searchStore.searchWords) ?
+                            <Text key={item.id}> </Text> :
+                            <TodoForm rootStore={this.props.rootStore} key={item.id} todoSerializers={item} /> :
+                            <TodoForm rootStore={this.props.rootStore} key={item.id} todoSerializers={item} />
                     ))}
             </ScrollView>
         )
