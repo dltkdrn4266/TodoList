@@ -1,11 +1,12 @@
 import React from 'react';
-import {View, TextInput, Button, AsyncStorage, ToastAndroid, ToolbarAndroid, StyleSheet} from 'react-native';
+import {View, TextInput, Button, AsyncStorage, ToastAndroid, Image, StyleSheet, Text} from 'react-native';
 import {action, observable} from "mobx";
 import RootStore from "../store/RootStore";
 import {inject, observer} from "mobx-react";
 import {AxiosError, AxiosResponse} from "axios";
 import {IUserSerializers} from "../Serializers";
 import {NavigationScreenProp} from "react-navigation";
+import CheckBox from 'react-native-elements';
 
 interface IProps {
     rootStore: RootStore;
@@ -60,31 +61,47 @@ export default class Login extends React.Component<IProps,{}> {
 
     render(){
         return(
-            <View>
-                <ToolbarAndroid
-                    style={styles.toolbar}
-                    logo={require('../picture/me-as-icon-with-glass-transparent.png')}
-                    title="TodoList"
-                />
+            <View style={styles.view}>
+                <Image style={styles.image} source={require('../picture/todolist-18-453844.png')}/>
+                <Text style={styles.text}>TodoList</Text>
                 <TextInput
-                    placeholder={'insert id'}
+                    style={styles.textInput}
+                    placeholder={'Username'}
                     onChangeText={this.idOnChangeHandler}
                 />
                 <TextInput
-                    placeholder={'insert password'}
+                    style={styles.textInput}
+                    placeholder={'password'}
                     onChangeText={this.pwOnChangeHandler}
                 />
-                <Button title={"Login"} onPress={this.loggedIn}/>
-
+                <View style={styles.button}>
+                    <Button title={"Login"} onPress={this.loggedIn}/>
+                </View>
             </View>
         );
     }
 }
 
 const styles = StyleSheet.create({
-    toolbar: {
-        backgroundColor: '#2196F3',
-        height: 56,
-        alignSelf: 'stretch'
+    view: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center'
     },
+    textInput: {
+        width: 300,
+        backgroundColor: '#ffffff'
+    },
+    button: {
+        width: 300
+    },
+    image: {
+        marginBottom: 20
+    },
+    text: {
+        fontSize: 40,
+        marginBottom: 20
+    }
+
 })

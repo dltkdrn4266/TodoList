@@ -1,10 +1,10 @@
 import React from 'react';
-import {View, Text, ToastAndroid, AsyncStorage, ToolbarAndroid, StyleSheet, ScrollView} from 'react-native'
+import {View, Text, ToastAndroid, ToolbarAndroid, StyleSheet, ScrollView} from 'react-native'
 import RootStore from '../store/RootStore';
 import {inject, observer} from "mobx-react";
 import {AxiosResponse, AxiosError} from "axios";
 import TodoForm from "./TodoForm";
-import {action, observable} from "mobx";
+import {action} from "mobx";
 import {NavigationScreenProp} from "react-navigation";
 import {ITodoSerializers} from "../Serializers";
 import Search from "./Search";
@@ -71,12 +71,14 @@ export default class TodoList extends React.Component<IProps,{}> {
                 />
                 <CalculationCompleteTodo rootStore={this.props.rootStore}/>
                 <Search rootStore={this.props.rootStore}/>
-                {console.log(this.props.rootStore.todoStore.TodoList.indexOf(this.props.rootStore.todoStore.TodoList[0]))}
-                {this.props.rootStore.todoStore.TodoList.map((item) => (
-                    this.props.rootStore.searchStore.searchWords !== '' ?
-                        item.content.search(this.props.rootStore.searchStore.searchWords) ? <Text key={item.id}> </Text> : <TodoForm rootStore={this.props.rootStore} key={item.id} todoSerializers={item} /> :
-                        <TodoForm rootStore={this.props.rootStore} key={item.id} todoSerializers={item} />
-                ))}
+                <View>
+                    {console.log(this.props.rootStore.todoStore.TodoList.indexOf(this.props.rootStore.todoStore.TodoList[0]))}
+                    {this.props.rootStore.todoStore.TodoList.map((item) => (
+                        this.props.rootStore.searchStore.searchWords !== '' ?
+                            item.content.search(this.props.rootStore.searchStore.searchWords) ? <Text key={item.id}> </Text> : <TodoForm rootStore={this.props.rootStore} key={item.id} todoSerializers={item} /> :
+                            <TodoForm rootStore={this.props.rootStore} key={item.id} todoSerializers={item} />
+                    ))}
+                </View>
             </ScrollView>
         )
     }
@@ -89,8 +91,8 @@ const styles = StyleSheet.create({
     },
     scrollView: {
         flex: 1,
-        height: 'auto'
-    },view: {
+    },
+    view: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center'

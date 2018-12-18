@@ -1,6 +1,5 @@
 import React from 'react';
-import {View, TextInput, StyleSheet, ToastAndroid} from "react-native";
-import {Button} from "react-native-material-ui";
+import {View, TextInput, StyleSheet, ToastAndroid, Button} from "react-native";
 import {action, observable} from "mobx";
 import {inject, observer} from "mobx-react";
 import RootStore from "../store/RootStore";
@@ -44,19 +43,23 @@ export default class addTodoScreen extends React.Component<IProps,{}> {
 
     render() {
         return(
-            <View style={style.View}>
-                <TextInput style={style.TextInput} placeholder={'Todo 입력'} onChangeText={this.contentOnChangeHandler}/>
-                <Button text={"작성하기"} onPress={this.onPressWriteButton}/>
+            <View style={styles.view}>
+                <TextInput style={styles.textInput} placeholder={'Todo 입력'} onChangeText={this.contentOnChangeHandler}/>
+                <Button title={"작성하기"} onPress={this.onPressWriteButton}/>
             </View>
         )
     }
 }
 
 
-const style = StyleSheet.create({
-    View: {
-        flex: 1
+const styles = StyleSheet.create({
+    view: {
+        flex: 1,
+        marginTop: 20
     },
-    TextInput: {
+    textInput: {
+    },
+    button: {
+        backgroundColor: '#66d6a0'
     }
 })
