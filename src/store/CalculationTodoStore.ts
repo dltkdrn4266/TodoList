@@ -19,7 +19,9 @@ export default class CalculationTodoStore {
     }
 
     public setCompleteTodo = () => {
-        this.completeTodo = this.rootStore.todoStore.TodoList.map((item) => ( item.completedAt === null )).length;
+        this.completeTodo = this.rootStore.todoStore.TodoList.filter(function (item) {
+                return item.isCompleted === true;
+            }).length;
         console.log('setCompleteTodo');
         console.log(this.completeTodo);
     }

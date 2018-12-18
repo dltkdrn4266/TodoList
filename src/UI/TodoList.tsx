@@ -70,10 +70,6 @@ export default class TodoList extends React.Component<IProps,{}> {
                     onActionSelected={this.onActionSelected}
                 />
                 <CalculationCompleteTodo rootStore={this.props.rootStore}/>
-                {/*<View style={styles.view}>*/}
-                    {/*<Text style={styles.text}>{this.allTodo/this.completeTodo ?*/}
-                        {/*(this.allTodo/this.completeTodo) * 100 : 0}% 완료 ({this.completeTodo}/{this.allTodo})</Text>*/}
-                {/*</View>*/}
                 <Search rootStore={this.props.rootStore}/>
                 {console.log(this.props.rootStore.todoStore.TodoList.indexOf(this.props.rootStore.todoStore.TodoList[0]))}
                 {this.props.rootStore.todoStore.TodoList.map((item) => (
