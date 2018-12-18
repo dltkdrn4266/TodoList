@@ -72,10 +72,11 @@ export default class TodoList extends React.Component<IProps,{}> {
                 <CalculationCompleteTodo rootStore={this.props.rootStore}/>
                 <Search rootStore={this.props.rootStore}/>
                 <View>
-                    {console.log(this.props.rootStore.todoStore.TodoList.indexOf(this.props.rootStore.todoStore.TodoList[0]))}
                     {this.props.rootStore.todoStore.TodoList.map((item) => (
                         this.props.rootStore.searchStore.searchWords !== '' ?
-                            item.content.search(this.props.rootStore.searchStore.searchWords) ? <Text key={item.id}> </Text> : <TodoForm rootStore={this.props.rootStore} key={item.id} todoSerializers={item} /> :
+                            item.content.search(this.props.rootStore.searchStore.searchWords) ?
+                                <Text key={item.id}> </Text> :
+                                <TodoForm rootStore={this.props.rootStore} key={item.id} todoSerializers={item} /> :
                             <TodoForm rootStore={this.props.rootStore} key={item.id} todoSerializers={item} />
                     ))}
                 </View>

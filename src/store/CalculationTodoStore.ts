@@ -15,11 +15,12 @@ export default class CalculationTodoStore {
     }
 
     public setAllTodo = () => {
-        this.allTodo = this.rootStore.todoStore.TodoList.length;
+        const todoArray = this.rootStore.todoStore.TodoList.slice();
+        this.allTodo = todoArray.length;
     }
 
     public setCompleteTodo = () => {
-        this.completeTodo = this.rootStore.todoStore.TodoList.filter(function (item) {
+        this.completeTodo = this.rootStore.todoStore.TodoList.slice().filter(function (item) {
                 return item.isCompleted === true;
             }).length;
         console.log('setCompleteTodo');

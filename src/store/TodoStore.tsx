@@ -44,11 +44,11 @@ export default class TodoStore {
     public deleteTodo = async (id: number, todo: ITodoSerializers) => {
         try{
             const response = await this.rootStore.axiosStore.instance.delete('/todo/' + id + '/');
-            console.log('@#$');
-            console.log(this.TodoList[this.rootStore.todoStore.TodoList.indexOf(todo)]);
             if(this.rootStore.todoStore.TodoList[this.rootStore.todoStore.TodoList.indexOf(todo)].isCompleted === true) {
                 this.rootStore.calculationTodoStore.completeTodo -= 1;
             }
+            console.log('@#$');
+            console.log(this.TodoList[this.rootStore.todoStore.TodoList.indexOf(todo)]);
             this.TodoList.splice(this.TodoList.indexOf(todo),1);
             console.log('delete Response');
             this.rootStore.calculationTodoStore.allTodo -= 1;
