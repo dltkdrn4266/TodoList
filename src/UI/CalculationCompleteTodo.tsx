@@ -20,9 +20,16 @@ export default class CalculationCompleteTodo extends React.Component<IProps,{}> 
         return(
             <View style={styles.view}>
                 <Text style={styles.text}>
-                    {(this.props.rootStore.calculationTodoStore.allTodo/this.props.rootStore.calculationTodoStore.completeTodo) * 100 ?
-                    (this.props.rootStore.calculationTodoStore.allTodo/this.props.rootStore.calculationTodoStore.completeTodo) * 100 : 0}% 완료
-                    ({this.props.rootStore.calculationTodoStore.completeTodo}/{this.props.rootStore.calculationTodoStore.allTodo})
+                    {
+                        (this.props.rootStore.calculationTodoStore.completeTodo/
+                            this.props.rootStore.calculationTodoStore.allTodo) * 100 &&
+                        ((this.props.rootStore.calculationTodoStore.completeTodo/
+                            this.props.rootStore.calculationTodoStore.allTodo) * 100) !== Infinity ?
+                        ((this.props.rootStore.calculationTodoStore.completeTodo/
+                            this.props.rootStore.calculationTodoStore.allTodo) * 100).toFixed(1) : 0
+                    }% 완료
+                    ({this.props.rootStore.calculationTodoStore.completeTodo}/
+                    {this.props.rootStore.calculationTodoStore.allTodo})
                 </Text>
             </View>
         )
