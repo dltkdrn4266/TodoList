@@ -1,5 +1,5 @@
-import RootStore from "./RootStore";
-import {observable} from "mobx";
+import RootStore from "./rootStore";
+import {action, observable} from "mobx";
 
 export default class CalculationTodoStore {
 
@@ -14,13 +14,15 @@ export default class CalculationTodoStore {
         this.completeTodo = 0;
     }
 
+    @action
     public setAllTodo = () => {
-        const todoArray = this.rootStore.todoStore.TodoList.slice();
+        const todoArray = this.rootStore.todoStore.todoList.slice();
         this.allTodo = todoArray.length;
     }
 
+    @action
     public setCompleteTodo = () => {
-        this.completeTodo = this.rootStore.todoStore.TodoList.slice().filter(function (item) {
+        this.completeTodo = this.rootStore.todoStore.todoList.slice().filter(function (item) {
                 return item.isCompleted === true;
             }).length;
         console.log('setCompleteTodo');

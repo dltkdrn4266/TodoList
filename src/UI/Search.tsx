@@ -1,5 +1,5 @@
 import React from 'react';
-import RootStore from "../store/RootStore";
+import RootStore from "../store/rootStore";
 import {TextInput, View, StyleSheet} from 'react-native';
 import {inject, observer} from "mobx-react";
 
@@ -9,6 +9,7 @@ interface IProps {
 @inject('rootStore')
 @observer
 export default class Search extends React.Component<IProps,{}> {
+
     constructor(props: IProps) {
         super(props);
     }

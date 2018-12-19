@@ -2,21 +2,15 @@ import Login from '../UI/Login';
 import TodoList from '../UI/TodoList';
 import addTodoScreen from "../UI/AddTodoScreen";
 import {
-    createStackNavigator,
-    createDrawerNavigator
+    createStackNavigator
 } from "react-navigation";
-import TodoForm from "../UI/TodoForm";
 
-export const Switch = createStackNavigator({
+export const Stack = createStackNavigator({
     LoginScreen: { screen: Login },
     TodoScreen: { screen: TodoList },
-    addTodoScreen: { screen: addTodoScreen },
-    todoFormScreen: { screen: TodoForm }
+    AddTodoScreen: { screen: addTodoScreen }
 }, {
     initialRouteName: 'LoginScreen',
     headerMode: 'none'
 });
 
-export const Drawer = createDrawerNavigator({
-    Stack: { screen: Switch }
-});

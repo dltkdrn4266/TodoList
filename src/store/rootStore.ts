@@ -1,8 +1,15 @@
-import AxiosStore from './AxiosStore';
-import LoginStore from './LoginStore';
-import TodoStore from './TodoStore';
-import SearchStore from "./SearchStore";
-import CalculationTodoStore from "./CalculationTodoStore";
+import AxiosStore from './axiosStore';
+import LoginStore from './loginStore';
+import TodoStore from './todoStore';
+import SearchStore from "./searchStore";
+import CalculationTodoStore from "./calculationTodoStore";
+import ItemStore from "./itemStore";
+import { configure } from 'mobx';
+
+
+configure({
+    enforceActions: 'observed'
+})
 
 export default class RootStore {
     public axiosStore: AxiosStore;
@@ -10,6 +17,7 @@ export default class RootStore {
     public todoStore: TodoStore;
     public searchStore: SearchStore;
     public calculationTodoStore: CalculationTodoStore;
+    public itemStore: ItemStore
 
     constructor(){
         this.axiosStore = new AxiosStore(this);
@@ -17,5 +25,6 @@ export default class RootStore {
         this.todoStore = new TodoStore(this);
         this.searchStore = new SearchStore(this);
         this.calculationTodoStore = new CalculationTodoStore(this);
+        this.itemStore = new ItemStore(this);
     }
 }

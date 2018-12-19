@@ -1,7 +1,7 @@
 import React from 'react';
 import {Text, View, StyleSheet} from "react-native";
 import {inject, observer} from "mobx-react";
-import RootStore from "../store/RootStore";
+import RootStore from "../store/rootStore";
 
 interface IProps {
     rootStore: RootStore;

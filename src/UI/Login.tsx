@@ -1,12 +1,11 @@
 import React from 'react';
 import {View, TextInput, Button, AsyncStorage, ToastAndroid, Image, StyleSheet, Text} from 'react-native';
 import {action, observable} from "mobx";
-import RootStore from "../store/RootStore";
+import RootStore from "../store/rootStore";
 import {inject, observer} from "mobx-react";
 import {AxiosError, AxiosResponse} from "axios";
-import {IUserSerializers} from "../Serializers";
+import {IUserSerializer} from "../Serializers";
 import {NavigationScreenProp} from "react-navigation";
-import CheckBox from 'react-native-elements';
 
 interface IProps {
     rootStore: RootStore;
@@ -15,40 +14,40 @@ interface IProps {
 @inject('rootStore')
 @observer
 export default class Login extends React.Component<IProps,{}> {
-    @observable private id: string = '';
-    @observable private pw: string = '';
-    @observable private isLoggedIn: boolean = true;
 
     constructor(props: IProps){
         super(props);
+        this.isLoggedIn();
     }
 
-    @action
-    private idOnChangeHandler = (e: string) => {
-        this.id = e;
-    }
-    @action
-    private pwOnChangeHandler = (e: string) => {
-        this.pw = e;
+    public isLoggedIn = async () => {
+        const rootStore = this.props.rootStore as RootStore;
+        try {
+            const value = await AsyncStorage.getItem('authToken');
+            if (value !== null) {
+                await rootStore.axiosStore.changeInstance();
+                this.props.navigation.navigate('TodoScreen');
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     @action
     public loggedIn = async () => {
         const rootStore = this.props.rootStore as RootStore
         try {
-            await rootStore.axiosStore.instance.post<IUserSerializers>('https://practice.alpaca.kr/api/users/login/', {
-                username: this.id,
-                password: this.pw
+            await rootStore.axiosStore.instance.post<IUserSerializer>('https://practice.alpaca.kr/api/users/login/', {
+                username: this.props.rootStore.loginStore.id,
+                password: this.props.rootStore.loginStore.pw
             }).then(async (response: AxiosResponse) => {
                 await AsyncStorage.setItem('authToken', response.data.authToken)
                     .then(() => {
                         rootStore.axiosStore.changeInstance().then(() => {
-                            this.isLoggedIn = true;
                             this.props.navigation.navigate('TodoScreen');
                         });
                     })
                     .catch((error: AxiosError) => {
-                        this.isLoggedIn = false;
                         console.log(error);
                     });
                 ToastAndroid.show('로그인 성공', ToastAndroid.BOTTOM);
@@ -67,12 +66,12 @@ export default class Login extends React.Component<IProps,{}> {
                 <TextInput
                     style={styles.textInput}
                     placeholder={'Username'}
-                    onChangeText={this.idOnChangeHandler}
+                    onChangeText={this.props.rootStore.loginStore.idOnChangeHandler}
                 />
                 <TextInput
                     style={styles.textInput}
                     placeholder={'password'}
-                    onChangeText={this.pwOnChangeHandler}
+                    onChangeText={this.props.rootStore.loginStore.pwOnChangeHandler}
                 />
                 <View style={styles.button}>
                     <Button title={"Login"} onPress={this.loggedIn}/>
