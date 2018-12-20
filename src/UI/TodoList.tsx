@@ -25,7 +25,7 @@ export default class TodoList extends React.Component<IProps,{}> {
 
     private onActionSelected = async(position: number) => {
         if(position === 0) {
-            this.props.navigation.navigate('AddTodoScreen');
+            this.props.navigation.navigate('TodoFormScreen');
         }else if(position === 1){
             await AsyncStorage.removeItem('authToken');
             this.props.navigation.navigate('LoginScreen');
@@ -33,7 +33,6 @@ export default class TodoList extends React.Component<IProps,{}> {
     }
 
     render() {
-
         return(
             <ScrollView style={styles.scrollView}>
                 <ToolbarAndroid
@@ -42,7 +41,7 @@ export default class TodoList extends React.Component<IProps,{}> {
                     actions={[{title: 'Todo 추가하기'},{title: '로그아웃'}]}
                     onActionSelected={this.onActionSelected}
                 />
-                <CalculationCompleteTodo rootStore={this.props.rootStore}/>
+                <CalculationCompleteTodo/>
                 <Search/>
                 <View>
                     {this.props.rootStore.todoStore.todoList.map((item) => (

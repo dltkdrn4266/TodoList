@@ -33,7 +33,7 @@ export default class todoForm extends React.Component<IProps,{}> {
                 ToastAndroid.show('Todo가 추가되었습니다', ToastAndroid.BOTTOM);
                 this.props.navigation.navigate('TodoScreen');
             } catch (error) {
-                console.log('AddTodoScreen onPressWriteButton');
+                console.log('TodoFormScreen onPressWriteButton');
                 console.log(error);
             }
         } else {

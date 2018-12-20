@@ -5,13 +5,11 @@ export default class CalculationTodoStore {
 
     private rootStore: RootStore;
 
-    @observable completeTodo: number;
-    @observable allTodo: number;
+    @observable completeTodo: number = 0;
+    @observable allTodo: number = 0;
 
     constructor(rootStore: RootStore) {
         this.rootStore = rootStore;
-        this.allTodo = 0;
-        this.completeTodo = 0;
     }
 
     @action

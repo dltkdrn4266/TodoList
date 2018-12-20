@@ -57,17 +57,15 @@ export default class TodoItem extends React.Component<IProps,{}> {
         this.completeTime = tempCompleteTime;
     }
 
-
+    @action
     private onPressHeartButton = async () => {
         const rootStore = this.props.rootStore as RootStore;
         try{
             const response = await rootStore.axiosStore.instance.post('/todo/' + this.props.todo.id + '/add_like/');
             const tempTodoList = [...rootStore.todoStore.todoList];
             tempTodoList.splice(tempTodoList.indexOf(this.props.todo), 1, response.data);
-            rootStore.todoStore.todoList = tempTodoList;
+            rootStore.todoStore.setTodoList(tempTodoList);
         } catch (error) {
-            console.log('TodoItem onPressHeartButton');
-            console.log(error);
         }
     }
 
@@ -87,8 +85,6 @@ export default class TodoItem extends React.Component<IProps,{}> {
         try {
             await rootStore.todoStore.deleteTodo(this.props.todo.id, this.props.todo);
         } catch (error) {
-            console.log('TodoItem onPressDeleteButton');
-            console.log(error);
         }
     }
 
@@ -110,8 +106,6 @@ export default class TodoItem extends React.Component<IProps,{}> {
             await rootStore.todoStore.completeTodo(this.props.todo.id, this.props.todo);
             this.completeTime = tempCompleteTime;
         } catch (error) {
-            console.log('TodoItem onPressCompleteButton');
-            console.log(error);
         }
     }
 
@@ -120,8 +114,6 @@ export default class TodoItem extends React.Component<IProps,{}> {
         try{
             await rootStore.todoStore.revertTodo(this.props.todo.id, this.props.todo);
         } catch (error) {
-            console.log('TodoItem onPressRevertButton');
-            console.log(error);
         }
     }
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, TextInput, Button, AsyncStorage, ToastAndroid, Image, StyleSheet, Text} from 'react-native';
-import {action, observable} from "mobx";
+import {action} from "mobx";
 import RootStore from "../store/rootStore";
 import {inject, observer} from "mobx-react";
 import {AxiosError, AxiosResponse} from "axios";
