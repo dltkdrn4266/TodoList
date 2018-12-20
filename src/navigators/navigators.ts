@@ -1,6 +1,6 @@
 import Login from '../UI/Login';
 import TodoList from '../UI/TodoList';
-import addTodoScreen from "../UI/AddTodoScreen";
+import todoForm from "../UI/TodoForm";
 import {
     createStackNavigator
 } from "react-navigation";
@@ -8,7 +8,7 @@ import {
 export const Stack = createStackNavigator({
     LoginScreen: { screen: Login },
     TodoScreen: { screen: TodoList },
-    AddTodoScreen: { screen: addTodoScreen }
+    TodoFormScreen: { screen: todoForm }
 }, {
     initialRouteName: 'LoginScreen',
     headerMode: 'none'

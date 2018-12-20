@@ -12,20 +12,24 @@ export default class TodoStore {
         this.rootStore = rootStore;
     }
 
-    @action
     public getTodoList = async () => {
-        await this.rootStore.axiosStore.instance.get<ITodoSerializer>('/todo/')
-            .then((response: AxiosResponse) => {
-                this.rootStore.todoStore.setTodoList(response.data);
-                ToastAndroid.show('불러오기 성공', ToastAndroid.TOP);
-                this.rootStore.calculationTodoStore.setAllTodo();
-                this.rootStore.calculationTodoStore.setCompleteTodo();
-                console.log(response);
-            })
-            .catch((error: AxiosError) => {
-                console.log('불러오기 실패');
-                ToastAndroid.show('불러오기 실패', ToastAndroid.TOP);
-            })
+        try {
+            await this.rootStore.axiosStore.instance.get<ITodoSerializer>('/todo/')
+                .then((response: AxiosResponse) => {
+                    this.rootStore.todoStore.setTodoList(response.data);
+                    ToastAndroid.show('불러오기 성공', ToastAndroid.TOP);
+                    this.rootStore.calculationTodoStore.setAllTodo();
+                    this.rootStore.calculationTodoStore.setCompleteTodo();
+                    console.log(response);
+                })
+                .catch((error: AxiosError) => {
+                    console.log('불러오기 실패');
+                    ToastAndroid.show('불러오기 실패', ToastAndroid.TOP);
+                })
+        } catch(error) {
+            console.log('todoStore getTodoList');
+            console.log(error);
+        }
     }
 
     @action
@@ -38,7 +42,7 @@ export default class TodoStore {
         try{
             const response = await this.rootStore.axiosStore.instance.post<ITodoSerializer>('/todo/', {
                 content: data
-            })
+            });
             const tempTodoList = [...this.rootStore.todoStore.todoList, response.data];
             this.rootStore.todoStore.todoList = tempTodoList;
             this.rootStore.calculationTodoStore.setAllTodo();

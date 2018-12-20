@@ -11,7 +11,7 @@ interface IProps {
 }
 @inject('rootStore')
 @observer
-export default class addTodoScreen extends React.Component<IProps,{}> {
+export default class todoForm extends React.Component<IProps,{}> {
     @observable private content: string = '';
 
 
