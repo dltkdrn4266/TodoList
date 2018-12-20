@@ -2,6 +2,7 @@ import React from 'react';
 import {Text, View, StyleSheet} from "react-native";
 import {inject, observer} from "mobx-react";
 import RootStore from "../store/rootStore";
+import calculationTodoStore from "../store/calculationTodoStore";
 
 interface IProps {
     rootStore: RootStore;
@@ -15,19 +16,20 @@ export default class CalculationCompleteTodo extends React.Component<IProps,{}> 
         super(props);
     }
 
+    private percentCalculationFunc = () => {
+        const calTodoStore = this.props.rootStore.calculationTodoStore as calculationTodoStore;
+        let percent: string = '0';
+        if(calTodoStore.completeTodo/calTodoStore.allTodo && calTodoStore.completeTodo/calTodoStore.allTodo !== Infinity) {
+            percent = ((calTodoStore.completeTodo/calTodoStore.allTodo) * 100).toFixed(1);
+        }
+        return percent;
+    }
 
     render() {
         return(
             <View style={styles.view}>
                 <Text style={styles.text}>
-                    {
-                        (this.props.rootStore.calculationTodoStore.completeTodo/
-                            this.props.rootStore.calculationTodoStore.allTodo) * 100 &&
-                        ((this.props.rootStore.calculationTodoStore.completeTodo/
-                            this.props.rootStore.calculationTodoStore.allTodo) * 100) !== Infinity ?
-                        ((this.props.rootStore.calculationTodoStore.completeTodo/
-                            this.props.rootStore.calculationTodoStore.allTodo) * 100).toFixed(1) : 0
-                    }% 완료
+                    {this.percentCalculationFunc()}% 완료
                     ({this.props.rootStore.calculationTodoStore.completeTodo}/
                     {this.props.rootStore.calculationTodoStore.allTodo})
                 </Text>

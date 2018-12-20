@@ -5,12 +5,11 @@ import {AxiosError, AxiosResponse} from "axios";
 import {ToastAndroid} from "react-native";
 
 export default class TodoStore {
-    @observable public todoList: ITodoSerializer[];
+    @observable public todoList: ITodoSerializer[] = [];
     private rootStore: RootStore;
 
     constructor(rootStore: RootStore){
         this.rootStore = rootStore;
-        this.todoList = [];
     }
 
     @action
@@ -24,7 +23,6 @@ export default class TodoStore {
                 console.log(response);
             })
             .catch((error: AxiosError) => {
-                console.log(error);
                 console.log('불러오기 실패');
                 ToastAndroid.show('불러오기 실패', ToastAndroid.TOP);
             })
@@ -38,20 +36,15 @@ export default class TodoStore {
     @action
     public addTodoList = async(data: string) => {
         try{
-            await this.rootStore.axiosStore.instance.post<ITodoSerializer>('/todo/', {
+            const response = await this.rootStore.axiosStore.instance.post<ITodoSerializer>('/todo/', {
                 content: data
             })
-                .then(response => {
-                    const tempTodoList = this.rootStore.todoStore.todoList;
-                    tempTodoList.push(response.data);
-                    this.rootStore.todoStore.todoList = tempTodoList;
-                    this.rootStore.calculationTodoStore.setAllTodo();
-                })
-                .catch(error => {
-                    console.log(error);
-                })
-        } catch (e) {
-            console.log('axiosStore.instance.post Error');
+            const tempTodoList = [...this.rootStore.todoStore.todoList, response.data];
+            this.rootStore.todoStore.todoList = tempTodoList;
+            this.rootStore.calculationTodoStore.setAllTodo();
+        } catch (error) {
+            console.log('todoStore addTodoList');
+            console.log(error);
         }
 
     }
@@ -59,39 +52,42 @@ export default class TodoStore {
     @action
     public deleteTodo = async (id: number, todo: ITodoSerializer) => {
         try{
-            const response = await this.rootStore.axiosStore.instance.delete('/todo/' + id + '/');
-            const tempTodoList = this.rootStore.todoStore.todoList;
+            await this.rootStore.axiosStore.instance.delete('/todo/' + id + '/');
+            const tempTodoList = [...this.rootStore.todoStore.todoList];
             tempTodoList.splice(tempTodoList.indexOf(todo), 1);
             this.rootStore.todoStore.todoList = tempTodoList;
             this.rootStore.calculationTodoStore.setCompleteTodo();
             this.rootStore.calculationTodoStore.setAllTodo();
         }catch (error) {
+            console.log('todoStore deleteTodo');
             console.log(error);
         }
     }
 
-
+    @action
     public completeTodo = async (id: number, todo: ITodoSerializer) => {
         try{
             const response = await this.rootStore.axiosStore.instance.post<ITodoSerializer>('/todo/' + id + '/complete/');
-            const tempTodoList = this.rootStore.todoStore.todoList;
-            console.log('response.data');
-            console.log(response.data);
+            const tempTodoList = [...this.rootStore.todoStore.todoList];
             tempTodoList.splice(tempTodoList.indexOf(todo), 1, response.data);
+            this.rootStore.todoStore.todoList = tempTodoList;
             this.rootStore.calculationTodoStore.setCompleteTodo();
         } catch (error) {
+            console.log('todoStore completeTodo');
             console.log(error);
         }
     }
 
-
+    @action
     public revertTodo = async (id: number, todo: ITodoSerializer) => {
         try{
             const response = await this.rootStore.axiosStore.instance.post<ITodoSerializer>('/todo/' + id + '/revert_complete/');
-            const tempTodoList = this.rootStore.todoStore.todoList;
+            const tempTodoList = [...this.rootStore.todoStore.todoList];
             tempTodoList.splice(tempTodoList.indexOf(todo), 1, response.data);
+            this.rootStore.todoStore.todoList = tempTodoList;
             this.rootStore.calculationTodoStore.setCompleteTodo();
         } catch (error) {
+            console.log('todoStore revertTodo');
             console.log(error);
         }
     }

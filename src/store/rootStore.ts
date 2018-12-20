@@ -6,7 +6,6 @@ import CalculationTodoStore from "./calculationTodoStore";
 import ItemStore from "./itemStore";
 import { configure } from 'mobx';
 
-
 configure({
     enforceActions: 'observed'
 })

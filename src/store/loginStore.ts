@@ -13,11 +13,9 @@ export default class loginStore {
     @action
     public idOnChangeHandler = (e: string) => {
         this.id = e;
-        console.log(this.id);
     }
     @action
     public pwOnChangeHandler = (e: string) => {
         this.pw = e;
-        console.log(this.pw);
     }
 }

@@ -47,7 +47,7 @@ export default class TodoList extends React.Component<IProps,{}> {
                 <View>
                     {this.props.rootStore.todoStore.todoList.map((item) => (
                         this.props.rootStore.searchStore.searchWords !== '' ?
-                            item.content.search(this.props.rootStore.searchStore.searchWords) > 0 ?
+                            item.content.search(this.props.rootStore.searchStore.searchWords) ?
                                 <Text key={item.id}> </Text> :
                                 <TodoItem key={item.id} todo={item} /> :
                             <TodoItem key={item.id} todo={item} />

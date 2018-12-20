@@ -3,11 +3,10 @@ import RootStore from "./rootStore";
 
 export default class SearchStore {
     private rootStore: RootStore;
-    @observable searchWords: string;
+    @observable searchWords: string = '';
 
     constructor(rootStore: RootStore){
         this.rootStore = rootStore;
-        this.searchWords = '';
     }
 
     @action

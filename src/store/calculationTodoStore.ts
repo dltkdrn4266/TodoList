@@ -25,8 +25,6 @@ export default class CalculationTodoStore {
         this.completeTodo = this.rootStore.todoStore.todoList.slice().filter(function (item) {
                 return item.isCompleted === true;
             }).length;
-        console.log('setCompleteTodo');
-        console.log(this.completeTodo);
     }
 
 }

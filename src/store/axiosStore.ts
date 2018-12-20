@@ -19,6 +19,7 @@ export default class AxiosStore {
                 this.temp = value;
             }
         } catch (error) {
+            console.log('axiosStore retrieveData');
             console.log(error);
         }
     }
@@ -30,7 +31,7 @@ export default class AxiosStore {
                 baseURL: 'https://practice.alpaca.kr/api/',
                 headers: {'Authorization': 'Token ' + this.temp}
             })
-        }catch (e) {
+        }catch (e){
             console.log('retrieveData Error');
         }
     }
