@@ -22,7 +22,7 @@ export default class TodoItem extends React.Component<IProps,{}> {
     constructor(props: IProps){
         super(props);
         this.setCreateTime(this.props.todo);
-        this.setCompleteTime(this.props.todo);
+        this.setCompleteTime(this.props.todo.completedAt);
     }
 
     public setCreateTime = (todo: ITodoSerializer) => {
@@ -40,10 +40,12 @@ export default class TodoItem extends React.Component<IProps,{}> {
     }
 
     @action
-    public setCompleteTime = (todo: ITodoSerializer) => {
+    public setCompleteTime = (completeTime: string) => {
         let tempCompleteTime = '';
-        if(todo.completedAt !== null) {
-            const completeDate = new Date(todo.completedAt);
+        console.log('setCompleteTime');
+        console.log(completeTime);
+        if(completeTime !== null) {
+            const completeDate = new Date(completeTime);
             const completeYear = completeDate.getFullYear();
             const completeMonth = completeDate.getMonth();
             const completeDay = completeDate.getDate();
@@ -88,24 +90,15 @@ export default class TodoItem extends React.Component<IProps,{}> {
         }
     }
 
-
+    @action
     private onPressCompleteButton = async () => {
         const rootStore = this.props.rootStore as RootStore;
 
-        const completeDate = new Date();
-        const completeYear = completeDate.getFullYear();
-        const completeMonth = completeDate.getMonth();
-        const completeDay = completeDate.getDate();
-        const completeHour = completeDate.getHours();
-        const completeMinute = completeDate.getMinutes();
-
-        const tempCompleteTime = completeYear + '년' + completeMonth + '월' + completeDay + '일' + ' ' +
-            completeHour + '시' + completeMinute + '분';
-
         try {
             await rootStore.todoStore.completeTodo(this.props.todo.id, this.props.todo);
-            this.completeTime = tempCompleteTime;
+            this.setCompleteTime(this.props.todo.completedAt);
         } catch (error) {
+            console.log(error);
         }
     }
 
