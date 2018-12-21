@@ -1,17 +1,16 @@
 import React from 'react';
 import {View, TextInput, Button, AsyncStorage, ToastAndroid, Image, StyleSheet, Text} from 'react-native';
 import {action} from "mobx";
-import RootStore from "../store/rootStore";
+import {IStoreInjectedProps, RootStore, STORE_NAME} from "../store/rootStore";
 import {inject, observer} from "mobx-react";
 import {AxiosError, AxiosResponse} from "axios";
 import {IUserSerializer} from "../Serializers";
 import {NavigationScreenProp} from "react-navigation";
 
-interface IProps {
-    rootStore: RootStore;
+interface IProps extends IStoreInjectedProps{
     navigation: NavigationScreenProp<{}>;
 }
-@inject('rootStore')
+@inject(STORE_NAME)
 @observer
 export default class Login extends React.Component<IProps,{}> {
 
@@ -21,7 +20,7 @@ export default class Login extends React.Component<IProps,{}> {
     }
 
     public isLoggedIn = async () => {
-        const rootStore = this.props.rootStore as RootStore;
+        const rootStore = this.props[STORE_NAME] as RootStore;
         try {
             const value = await AsyncStorage.getItem('authToken');
             if (value !== null) {
@@ -35,11 +34,11 @@ export default class Login extends React.Component<IProps,{}> {
 
     @action
     public loggedIn = async () => {
-        const rootStore = this.props.rootStore as RootStore
+        const rootStore = this.props[STORE_NAME] as RootStore
         try {
             await rootStore.axiosStore.instance.post<IUserSerializer>('https://practice.alpaca.kr/api/users/login/', {
-                username: this.props.rootStore.loginStore.id,
-                password: this.props.rootStore.loginStore.pw
+                username: this.props[STORE_NAME]!.loginStore.id,
+                password: this.props[STORE_NAME]!.loginStore.pw
             }).then(async (response: AxiosResponse) => {
                 await AsyncStorage.setItem('authToken', response.data.authToken)
                     .then(() => {
@@ -66,12 +65,12 @@ export default class Login extends React.Component<IProps,{}> {
                 <TextInput
                     style={styles.textInput}
                     placeholder={'Username'}
-                    onChangeText={this.props.rootStore.loginStore.idOnChangeHandler}
+                    onChangeText={this.props[STORE_NAME]!.loginStore.idOnChangeHandler}
                 />
                 <TextInput
                     style={styles.textInput}
                     placeholder={'password'}
-                    onChangeText={this.props.rootStore.loginStore.pwOnChangeHandler}
+                    onChangeText={this.props[STORE_NAME]!.loginStore.pwOnChangeHandler}
                 />
                 <View style={styles.button}>
                     <Button title={"Login"} onPress={this.loggedIn}/>

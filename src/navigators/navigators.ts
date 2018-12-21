@@ -1,6 +1,6 @@
-import Login from '../UI/Login';
-import TodoList from '../UI/TodoList';
-import todoForm from "../UI/TodoForm";
+import Login from '../screen/Login';
+import TodoList from '../screen/TodoList';
+import todoForm from "../screen/TodoForm";
 import {
     createStackNavigator
 } from "react-navigation";

@@ -1,5 +1,5 @@
 import {ITodoSerializer} from "../Serializers";
-import RootStore from "./rootStore";
+import {RootStore} from "./rootStore";
 import {action, observable} from "mobx";
 import {AxiosError, AxiosResponse} from "axios";
 import {ToastAndroid} from "react-native";
@@ -18,8 +18,6 @@ export default class TodoStore {
                 .then((response: AxiosResponse) => {
                     this.rootStore.todoStore.setTodoList(response.data);
                     ToastAndroid.show('불러오기 성공', ToastAndroid.TOP);
-                    this.rootStore.calculationTodoStore.setAllTodo();
-                    this.rootStore.calculationTodoStore.setCompleteTodo();
                 })
                 .catch((error: AxiosError) => {
                     ToastAndroid.show('불러오기 실패', ToastAndroid.TOP);
@@ -41,7 +39,6 @@ export default class TodoStore {
             });
             const tempTodoList = [...this.rootStore.todoStore.todoList, response.data];
             this.rootStore.todoStore.setTodoList(tempTodoList);
-            this.rootStore.calculationTodoStore.setAllTodo();
         } catch (error) {
         }
 
@@ -54,8 +51,6 @@ export default class TodoStore {
             const tempTodoList = [...this.rootStore.todoStore.todoList];
             tempTodoList.splice(tempTodoList.indexOf(todo), 1);
             this.rootStore.todoStore.setTodoList(tempTodoList);
-            this.rootStore.calculationTodoStore.setCompleteTodo();
-            this.rootStore.calculationTodoStore.setAllTodo();
         }catch (error) {
         }
     }
@@ -67,7 +62,6 @@ export default class TodoStore {
             const tempTodoList = [...this.rootStore.todoStore.todoList];
             tempTodoList.splice(tempTodoList.indexOf(todo), 1, response.data);
             this.rootStore.todoStore.setTodoList(tempTodoList);
-            this.rootStore.calculationTodoStore.setCompleteTodo();
         } catch (error) {
         }
     }
@@ -79,7 +73,6 @@ export default class TodoStore {
             const tempTodoList = [...this.rootStore.todoStore.todoList];
             tempTodoList.splice(tempTodoList.indexOf(todo), 1, response.data);
             this.rootStore.todoStore.setTodoList(tempTodoList);
-            this.rootStore.calculationTodoStore.setCompleteTodo();
         } catch (error) {
         }
     }

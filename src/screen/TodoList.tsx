@@ -1,17 +1,16 @@
 import React from 'react';
-import {View, Text, ToolbarAndroid, StyleSheet, ScrollView, AsyncStorage} from 'react-native'
-import RootStore from '../store/rootStore';
+import {View, ToolbarAndroid, StyleSheet, ScrollView, AsyncStorage} from 'react-native'
+import {IStoreInjectedProps, STORE_NAME} from '../store/rootStore';
 import {inject, observer} from "mobx-react";
-import TodoItem from "./TodoItem";
+import TodoItem from "../components/TodoItem";
 import {NavigationScreenProp} from "react-navigation";
-import Search from "./Search";
-import CalculationCompleteTodo from "./CalculationCompleteTodo";
+import Search from "../components/Search";
+import CalculationCompleteTodo from "../components/CalculationCompleteTodo";
 
-interface IProps {
-    rootStore: RootStore;
+interface IProps extends IStoreInjectedProps{
     navigation: NavigationScreenProp<{}>;
 }
-@inject('rootStore')
+@inject(STORE_NAME)
 @observer
 export default class TodoList extends React.Component<IProps,{}> {
 
@@ -20,7 +19,7 @@ export default class TodoList extends React.Component<IProps,{}> {
     }
 
     public async componentDidMount() {
-        await this.props.rootStore.todoStore.getTodoList();
+        await this.props[STORE_NAME]!.todoStore.getTodoList();
     }
 
     private onActionSelected = async(position: number) => {
@@ -44,9 +43,9 @@ export default class TodoList extends React.Component<IProps,{}> {
                 <CalculationCompleteTodo/>
                 <Search/>
                 <View>
-                    {this.props.rootStore.todoStore.todoList.map((item) => (
-                        this.props.rootStore.searchStore.searchWords !== '' ?
-                            item.content.search(this.props.rootStore.searchStore.searchWords) >= 0 ?
+                    {this.props[STORE_NAME]!.todoStore.todoList.map((item) => (
+                        this.props[STORE_NAME]!.searchStore.searchWords !== '' ?
+                            item.content.search(this.props[STORE_NAME]!.searchStore.searchWords) >= 0 ?
                                 <TodoItem key={item.id} todo={item} /> :
                                 null :
                             <TodoItem key={item.id} todo={item} />

@@ -2,14 +2,13 @@ import React from 'react';
 import {View, TextInput, StyleSheet, ToastAndroid, Button} from "react-native";
 import {action, observable} from "mobx";
 import {inject, observer} from "mobx-react";
-import RootStore from "../store/rootStore";
+import {IStoreInjectedProps, RootStore, STORE_NAME} from "../store/rootStore";
 import {NavigationScreenProp} from "react-navigation";
 
-interface IProps {
-    rootStore: RootStore;
+interface IProps extends IStoreInjectedProps{
     navigation: NavigationScreenProp<{}>;
 }
-@inject('rootStore')
+@inject(STORE_NAME)
 @observer
 export default class todoForm extends React.Component<IProps,{}> {
     @observable private content: string = '';
@@ -25,7 +24,7 @@ export default class todoForm extends React.Component<IProps,{}> {
     }
 
     private onPressWriteButton = async() => {
-        const rootStore = this.props.rootStore as RootStore;
+        const rootStore = this.props[STORE_NAME] as RootStore;
 
         if(this.content !== '') {
             try {

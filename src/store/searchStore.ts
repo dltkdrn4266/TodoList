@@ -1,5 +1,5 @@
 import {action, observable} from "mobx";
-import RootStore from "./rootStore";
+import {RootStore} from "./rootStore";
 
 export default class SearchStore {
     private rootStore: RootStore;

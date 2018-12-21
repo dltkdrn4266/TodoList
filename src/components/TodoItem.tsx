@@ -1,31 +1,33 @@
 import React from 'react';
 import {View, Text, StyleSheet, Alert} from "react-native";
 import {ITodoSerializer} from "../Serializers";
-import RootStore from "../store/rootStore";
-import {inject, observer} from "mobx-react";
-import {action, observable} from "mobx";
+import {RootStore,IStoreInjectedProps,STORE_NAME} from "../store/rootStore";
+import {inject} from "mobx-react";
+import {action} from "mobx";
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Loading from "./loading";
 
-interface IProps{
+interface IProps extends IStoreInjectedProps{
     key: number,
     todo : ITodoSerializer;
-    rootStore: RootStore;
+}
+interface IState{
+    loading: boolean;
 }
 
-@inject('rootStore')
-@observer
-export default class TodoItem extends React.Component<IProps,{}> {
 
-    public createTime: string = '';
-    @observable public completeTime: string = '';
+@inject(STORE_NAME)
+export default class TodoItem extends React.Component<IProps,IState> {
+
+    public readonly state: IState = {
+        loading : false
+    }
 
     constructor(props: IProps){
         super(props);
-        this.setCreateTime(this.props.todo);
-        this.setCompleteTime(this.props.todo.completedAt);
     }
 
-    public setCreateTime = (todo: ITodoSerializer) => {
+    public getCreateTime = (todo: ITodoSerializer) => {
         const createDate = new Date(todo.createdAt);
         const createYear = createDate.getFullYear();
         const createMonth = createDate.getMonth();
@@ -36,11 +38,11 @@ export default class TodoItem extends React.Component<IProps,{}> {
         const tempCreateTime = createYear + '년' + createMonth + '월' + createDay + '일' +  ' ' +
             createHour + '시' + createMinute + '분';
 
-        this.createTime = tempCreateTime;
+        return tempCreateTime;
     }
 
     @action
-    public setCompleteTime = (completeTime: string) => {
+    public getCompleteTime = (completeTime: string) => {
         let tempCompleteTime = '';
         if(completeTime !== null) {
             const completeDate = new Date(completeTime);
@@ -54,19 +56,21 @@ export default class TodoItem extends React.Component<IProps,{}> {
                 completeHour + '시' + completeMinute + '분';
 
         }
-        this.completeTime = tempCompleteTime;
+        return tempCompleteTime;
     }
 
     @action
     private onPressHeartButton = async () => {
-        const rootStore = this.props.rootStore as RootStore;
+        const rootStore = this.props[STORE_NAME] as RootStore;
         try{
+            this.setState({loading: true});
             const response = await rootStore.axiosStore.instance.post('/todo/' + this.props.todo.id + '/add_like/');
             const tempTodoList = [...rootStore.todoStore.todoList];
             tempTodoList.splice(tempTodoList.indexOf(this.props.todo), 1, response.data);
             rootStore.todoStore.setTodoList(tempTodoList);
         } catch (error) {
         }
+        this.setState({loading: false});
     }
 
     private onPressShowModalButton = () => {
@@ -81,41 +85,54 @@ export default class TodoItem extends React.Component<IProps,{}> {
     }
 
     private onPressDeleteButton = async () => {
-        const rootStore = this.props.rootStore as RootStore;
+        const rootStore = this.props[STORE_NAME] as RootStore;
         try {
+            this.setState({loading: true});
             await rootStore.todoStore.deleteTodo(this.props.todo.id, this.props.todo);
         } catch (error) {
         }
+        this.setState({loading: false});
     }
 
     @action
     private onPressCompleteButton = async () => {
-        const rootStore = this.props.rootStore as RootStore;
+        const rootStore = this.props[STORE_NAME] as RootStore;
 
         try {
+            this.setState({loading: true});
             await rootStore.todoStore.completeTodo(this.props.todo.id, this.props.todo);
-            this.setCompleteTime(this.props.todo.completedAt);
+            this.getCompleteTime(this.props.todo.completedAt);
         } catch (error) {
         }
+        this.setState({loading: false});
     }
 
     private onPressRevertButton = async() => {
-        const rootStore = this.props.rootStore as RootStore;
+        const rootStore = this.props[STORE_NAME] as RootStore;
         try{
+            this.setState({loading: true});
             await rootStore.todoStore.revertTodo(this.props.todo.id, this.props.todo);
         } catch (error) {
         }
+        this.setState({loading: false});
     }
 
     render() {
+        if(this.state.loading){
+            return(
+                <View style={styles.rowView}>
+                    <Loading/>
+                </View>
+            )
+        }
         return(
             <View style={styles.rowView}>
                 <View style={styles.columnView}>
                     <Text style={{fontSize: 20}}>{this.props.todo.content}</Text>
-                    <Text>{this.createTime}</Text>
+                    <Text>{this.getCreateTime(this.props.todo)}</Text>
                     <Text> </Text>
                     <Text>{this.props.todo.isCompleted ?
-                        this.completeTime : '완료되지 않았음'}</Text>
+                        this.getCompleteTime(this.props.todo.completedAt) : '완료되지 않았음'}</Text>
                 </View>
                 <View style={styles.iconButton}>
                     <Icon.Button name="heart" backgroundColor={'#f44242'} size={18} onPress={this.onPressHeartButton}>
@@ -148,11 +165,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         borderBottomColor: '#47315a',
         borderBottomWidth: 1,
-        padding: 5
-    },
-    checkBox: {
-        width: 40,
-        height: 40
+        width: 410,
+        height: 123,
+        padding: 5,
     },
     iconButton: {
         width: 93

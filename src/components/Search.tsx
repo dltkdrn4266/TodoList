@@ -1,12 +1,11 @@
 import React from 'react';
-import RootStore from "../store/rootStore";
+import {IStoreInjectedProps, STORE_NAME} from "../store/rootStore";
 import {TextInput, View, StyleSheet} from 'react-native';
 import {inject, observer} from "mobx-react";
 
-interface IProps {
-    rootStore: RootStore;
+interface IProps extends IStoreInjectedProps{
 }
-@inject('rootStore')
+@inject(STORE_NAME)
 @observer
 export default class Search extends React.Component<IProps,{}> {
 
@@ -15,7 +14,7 @@ export default class Search extends React.Component<IProps,{}> {
     }
 
     private onChangeText = (e: string) => {
-        this.props.rootStore!.searchStore.onChangeTextInput(e);
+        this.props[STORE_NAME]!.searchStore.onChangeTextInput(e);
     }
 
     render(){

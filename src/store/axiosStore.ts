@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {action, observable} from "mobx";
-import RootStore from "./rootStore";
+import {RootStore} from "./rootStore";
 import {AsyncStorage} from "react-native";
 
 export default class AxiosStore {
