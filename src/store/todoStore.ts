@@ -20,15 +20,11 @@ export default class TodoStore {
                     ToastAndroid.show('불러오기 성공', ToastAndroid.TOP);
                     this.rootStore.calculationTodoStore.setAllTodo();
                     this.rootStore.calculationTodoStore.setCompleteTodo();
-                    console.log(response);
                 })
                 .catch((error: AxiosError) => {
-                    console.log(error);
                     ToastAndroid.show('불러오기 실패', ToastAndroid.TOP);
                 })
         } catch(error) {
-            console.log('todoStore getTodoList');
-            console.log(error);
         }
     }
 
@@ -47,8 +43,6 @@ export default class TodoStore {
             this.rootStore.todoStore.setTodoList(tempTodoList);
             this.rootStore.calculationTodoStore.setAllTodo();
         } catch (error) {
-            console.log('todoStore addTodoList');
-            console.log(error);
         }
 
     }
@@ -63,8 +57,6 @@ export default class TodoStore {
             this.rootStore.calculationTodoStore.setCompleteTodo();
             this.rootStore.calculationTodoStore.setAllTodo();
         }catch (error) {
-            console.log('todoStore deleteTodo');
-            console.log(error);
         }
     }
 
@@ -77,8 +69,6 @@ export default class TodoStore {
             this.rootStore.todoStore.setTodoList(tempTodoList);
             this.rootStore.calculationTodoStore.setCompleteTodo();
         } catch (error) {
-            console.log('todoStore completeTodo');
-            console.log(error);
         }
     }
 
@@ -91,8 +81,6 @@ export default class TodoStore {
             this.rootStore.todoStore.setTodoList(tempTodoList);
             this.rootStore.calculationTodoStore.setCompleteTodo();
         } catch (error) {
-            console.log('todoStore revertTodo');
-            console.log(error);
         }
     }
 

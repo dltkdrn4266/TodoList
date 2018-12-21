@@ -42,8 +42,6 @@ export default class TodoItem extends React.Component<IProps,{}> {
     @action
     public setCompleteTime = (completeTime: string) => {
         let tempCompleteTime = '';
-        console.log('setCompleteTime');
-        console.log(completeTime);
         if(completeTime !== null) {
             const completeDate = new Date(completeTime);
             const completeYear = completeDate.getFullYear();
@@ -98,7 +96,6 @@ export default class TodoItem extends React.Component<IProps,{}> {
             await rootStore.todoStore.completeTodo(this.props.todo.id, this.props.todo);
             this.setCompleteTime(this.props.todo.completedAt);
         } catch (error) {
-            console.log(error);
         }
     }
 
