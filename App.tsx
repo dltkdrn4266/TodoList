@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Stack} from "./src/navigators/navigators";
+import {RootStack} from "./src/navigators/navigators";
 import RootStore from "./src/store/rootStore";
 import {Provider} from "mobx-react";
 
@@ -9,7 +9,7 @@ export default class App extends Component {
     render() {
         return (
             <Provider rootStore={rootStore}>
-                <Stack />
+                <RootStack />
             </Provider>
         );
     }

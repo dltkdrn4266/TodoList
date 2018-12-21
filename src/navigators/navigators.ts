@@ -5,7 +5,7 @@ import {
     createStackNavigator
 } from "react-navigation";
 
-export const Stack = createStackNavigator({
+export const RootStack = createStackNavigator({
     LoginScreen: { screen: Login },
     TodoScreen: { screen: TodoList },
     TodoFormScreen: { screen: todoForm }
